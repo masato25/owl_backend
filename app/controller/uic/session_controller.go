@@ -1,4 +1,4 @@
-package controller
+package uic
 
 import (
 	"time"
@@ -97,6 +97,32 @@ func AuthSession(c *gin.Context) {
 	}
 	c.JSON(200, gin.H{
 		"message": "session is vaild!",
+	})
+	return
+}
+
+func CreateRoot(c *gin.Context) {
+	password := c.DefaultQuery("password", "")
+	if password == "" {
+		c.JSON(400, gin.H{
+			"error": "password is empty, please check it",
+		})
+		return
+	}
+	password = utils.HashIt(password)
+	user := uic.User{
+		Name:   "root",
+		Passwd: password,
+	}
+	dt := db.Uic.Table("user").Save(&user)
+	if dt.Error != nil {
+		c.JSON(400, gin.H{
+			"error": dt.Error.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": "root created!",
 	})
 	return
 }

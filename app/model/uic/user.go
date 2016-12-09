@@ -3,16 +3,15 @@ package uic
 import "time"
 
 type User struct {
-	ID      int64     `json:"id"`
-	Name    string    `json:"name"`
-	Cnname  string    `json:"cnname"`
-	Passwd  string    `json:"-"`
-	Email   string    `json:"email"`
-	Phone   string    `json:"phone"`
-	IM      string    `json:"im" gorm:"column:im"`
-	QQ      string    `json:"qq" gorm:"column:qq"`
-	Role    int       `json:"role"`
-	Created time.Time `json:"-"`
+	ID     int64  `json:"id"`
+	Name   string `json:"name"`
+	Cnname string `json:"cnname"`
+	Passwd string `json:"-"`
+	Email  string `json:"email"`
+	Phone  string `json:"phone"`
+	IM     string `json:"im" gorm:"column:im"`
+	QQ     string `json:"qq" gorm:"column:qq"`
+	Role   int    `json:"role"`
 }
 
 type Team struct {
@@ -38,6 +37,10 @@ type Session struct {
 
 func (this Session) TableName() string {
 	return "session"
+}
+
+func (this User) TableName() string {
+	return "user"
 }
 
 //db.SingularTable(true)
