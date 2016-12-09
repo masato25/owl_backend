@@ -20,8 +20,8 @@ All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616
 
 #### Login User `/api/v1/user/login`
 * [POST]
-* Error: 400
 * ex. "name=xxx;password=xxx"
+* Error: 400
 
 #### Logout User `/api/v1/user/logout`
 * [POST]
