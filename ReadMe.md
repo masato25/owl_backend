@@ -4,6 +4,7 @@ web api backend made for open-falcon
 
 ## Base
 All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+
 ### Graph
 
 #### Get endpoint by regexp `/api/v1/graph/endpoint?q=${string}`
@@ -32,3 +33,9 @@ All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616
 * [GET]
 * [cookie]/[post_form] ex. "name=xxx;sig=xxx"
 * Error: 401
+
+#### Create User `/api/v1/user/create`
+* [POST]
+* ex. "name=xxx;password=xxx;cnname=xxx;email=xxx;phone=xxx;im=xxx;qq=xxx"
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/apidoc.html)
