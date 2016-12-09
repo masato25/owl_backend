@@ -5,6 +5,7 @@
     "uic": "root:passwd@tcp(127.0.0.1:3306)/uic?charset=utf8&parseTime=True&loc=Local",
     "db_bug": true
   },
+  "gen_doc": false,
   "log_level": "debug",
-  "salt": "imsalt"
+  "salt": "----"
 }
