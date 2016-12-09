@@ -34,6 +34,7 @@ func InitDB(loggerlevel bool) (err error) {
 	if err != nil {
 		return
 	}
+	portal.SingularTable(true)
 	dbp.Falcon = portal
 
 	var g *sql.DB
@@ -42,6 +43,7 @@ func InitDB(loggerlevel bool) (err error) {
 	if err != nil {
 		return
 	}
+	graphd.SingularTable(true)
 	dbp.Graph = graphd
 
 	var u *sql.DB
@@ -50,6 +52,7 @@ func InitDB(loggerlevel bool) (err error) {
 	if err != nil {
 		return
 	}
+	uicd.SingularTable(true)
 	dbp.Uic = uicd
 
 	SetLogLevel(loggerlevel)
