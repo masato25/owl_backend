@@ -16,7 +16,7 @@ func Routes(r *gin.Engine) {
 	r.POST("/api/v1/user/create", CreateUser)
 	authapi := r.Group("/api/v1/user")
 	authapi.Use(utils.AuthSessionMidd)
-	authapi.POST("/api/v1/user/update", UserUpdate)
-	authapi.POST("/api/v1/user/cgpasswd", ChangePassword)
-	authapi.GET("/api/v1/user/current", UserInfo)
+	authapi.POST("/update", UserUpdate)
+	authapi.POST("/cgpasswd", ChangePassword)
+	authapi.GET("/current", UserInfo)
 }
