@@ -56,5 +56,15 @@ func SessionChecking(c *gin.Context) (auth bool, err error) {
 		auth = true
 	}
 	return
+}
 
+func GetUser(c *gin.Context) (user uic.User, err error) {
+	db := config.Con().Uic
+	websession, _ := GetSession(c)
+	user = uic.User{
+		Name: websession.Name,
+	}
+	dt := db.Where(&user).Find(&user)
+	err = dt.Error
+	return
 }
