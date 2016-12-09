@@ -5,12 +5,18 @@ import (
 	"net/http"
 	"testing"
 
+	log "github.com/Sirupsen/logrus"
+	"github.com/chyeh/viper"
 	"github.com/masato25/resty"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGraph(t *testing.T) {
+	viper.AddConfigPath("../../")
+	viper.SetConfigName("cfg_test")
+	viper.ReadInConfig()
+	log.SetLevel(log.DebugLevel)
 	host := "http://localhost:3000/api/v1/graph"
 	cname := "test1"
 	csig := "d4f71cba377911e699d60242ac110010"
@@ -36,7 +42,8 @@ func TestGraph(t *testing.T) {
 	})
 
 	Convey("Get Counter List", t, func() {
-		resp, _ := rt.R().SetQueryParam("eid", "6,7").Get(fmt.Sprintf("%s/endpoint_counter", host))
+		resp, _ := rt.R().SetQueryParam("eid", "6,7").SetQueryParam("metricQuery", "disk.+").Get(fmt.Sprintf("%s/endpoint_counter", host))
+		log.Debug(resp.String())
 		So(resp.StatusCode(), ShouldEqual, 200)
 	})
 

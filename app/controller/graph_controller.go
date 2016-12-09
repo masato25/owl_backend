@@ -28,6 +28,7 @@ func EndpointRegexpQuery(c *gin.Context) {
 
 func EndpointCounterRegexpQuery(c *gin.Context) {
 	eid := c.DefaultQuery("eid", "")
+	metricQuery := c.DefaultQuery("metricQuery", ".+")
 	if eid == "" {
 		c.JSON(400, gin.H{
 			"error": "eid is missing",
@@ -43,7 +44,7 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 			eids = fmt.Sprintf("(%s)", eids)
 		}
 		var counters []m.EndpointCounter
-		db.Graph.Table("endpoint_counter").Select("counter").Where(fmt.Sprintf("endpoint_id IN %s", eids)).Scan(&counters)
+		db.Graph.Table("endpoint_counter").Select("counter").Where(fmt.Sprintf("endpoint_id IN %s AND counter regexp '%s' ", eids, metricQuery)).Scan(&counters)
 		countersResp := []interface{}{}
 		for _, c := range counters {
 			countersResp = append(countersResp, c.Counter)

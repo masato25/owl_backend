@@ -6,12 +6,17 @@ import (
 	"testing"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/chyeh/viper"
 	"github.com/elgs/gojq"
 	"github.com/masato25/resty"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestUser(t *testing.T) {
+	viper.AddConfigPath("../../../")
+	viper.SetConfigName("cfg_test")
+	viper.ReadInConfig()
+	log.SetLevel(log.DebugLevel)
 	host := "http://localhost:3000/api/v1"
 	Convey("Get User Login Failed", t, func() {
 		rt := resty.New()
