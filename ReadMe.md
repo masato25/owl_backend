@@ -9,18 +9,26 @@ All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616
 #### Get endpoint by regexp `/api/v1/graph/endpoint?q=${string}`
 * [GET]
 * ex. http://localhost:3000/api/v1/graph/endpoint?q=b.%2B
+* Error 401, 400
 
 #### Get metric count list base on endpoint_id `/api/v1/graph/endpoint_counter?eid=${string}`
 * [GET]
 * ex. http://localhost:3000/api/v1/graph/endpoint_counter?eid=285533184,73482468
-
+* Error 401, 400
 
 ### User
 
 #### Login User `/api/v1/user/login`
 * [POST]
+* Error: 400
 * ex. "name=xxx;password=xxx"
 
-#### Login User `/api/v1/user/logout`
+#### Logout User `/api/v1/user/logout`
 * [POST]
 * [cookie]/[post_form] ex. "name=xxx;sig=xxx"
+* Error: 400
+
+#### Auth User `/api/v1/user/auth_session`
+* [GET]
+* [cookie]/[post_form] ex. "name=xxx;sig=xxx"
+* Error: 401
