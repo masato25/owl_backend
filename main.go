@@ -2,11 +2,11 @@ package main
 
 import (
 	log "github.com/Sirupsen/logrus"
-	yaag_gin "github.com/betacraft/yaag/gin"
-	"github.com/betacraft/yaag/yaag"
 	"github.com/gin-gonic/gin"
 	"github.com/masato25/owl_backend/app/controller"
 	"github.com/masato25/owl_backend/config"
+	yaag_gin "github.com/masato25/yaag/gin"
+	"github.com/masato25/yaag/yaag"
 	"github.com/spf13/viper"
 )
 

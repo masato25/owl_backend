@@ -86,14 +86,13 @@ func UserUpdate(c *gin.Context) {
 	qq := c.DefaultQuery("qq", "")
 	websession, _ := helper.GetSession(c)
 	user := uic.User{
-		Name:   websession.Name,
 		Cnname: cnname,
 		Email:  email,
 		Phone:  phone,
 		IM:     im,
 		QQ:     qq,
 	}
-	dt := db.Uic.Table("user").Update(&user)
+	dt := db.Uic.Table("user").Where("name = ?", websession.Name).Update(&user)
 	if dt.Error != nil {
 		c.JSON(400, gin.H{
 			"error": dt.Error.Error(),
@@ -111,7 +110,7 @@ func ChangePassword(c *gin.Context) {
 	newPassword := c.DefaultQuery("new_password", "")
 	websession, _ := helper.GetSession(c)
 	user := uic.User{Name: websession.Name}
-	dt := db.Uic.Where(&user).Scan(&user)
+	dt := db.Uic.Where(&user).Find(&user)
 	switch {
 	case dt.Error != nil:
 		c.JSON(400, gin.H{
@@ -141,7 +140,7 @@ func ChangePassword(c *gin.Context) {
 func UserInfo(c *gin.Context) {
 	websession, _ := helper.GetSession(c)
 	user := uic.User{Name: websession.Name}
-	dt := db.Uic.Where(&user).Scan(&user)
+	dt := db.Uic.Where(&user).Find(&user)
 	if dt.Error != nil {
 		c.JSON(400, gin.H{
 			"error": dt.Error.Error(),
