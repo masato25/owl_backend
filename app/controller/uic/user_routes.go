@@ -22,4 +22,5 @@ func Routes(r *gin.Engine) {
 	authapi_team := r.Group("/api/v1/team")
 	authapi_team.Use(utils.AuthSessionMidd)
 	authapi_team.POST("/create", CreateTeam)
+	authapi_team.GET("/list", Teams)
 }

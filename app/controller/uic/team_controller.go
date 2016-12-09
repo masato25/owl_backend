@@ -4,19 +4,36 @@ import (
 	"github.com/gin-gonic/gin"
 	h "github.com/masato25/owl_backend/app/helper"
 	"github.com/masato25/owl_backend/app/model/uic"
-	"github.com/masato25/owl_backend/app/utils"
 )
 
 //this is root action pending
 func Teams(c *gin.Context) {
-
+	query := c.DefaultQuery("query", ".+")
+	user, err := h.GetUser(c)
+	if err != nil {
+		h.ErrorRepose(c, 400, err)
+		return
+	}
+	teams := []uic.Team{}
+	if user.Role == 2 {
+		dt := db.Uic.Table("team").Where("name regexp ?", query).Scan(&teams)
+		err = dt.Error
+	} else {
+		dt := db.Uic.Table("team").Where("name regexp ? AND creator = ?", query, user.ID).Scan(&teams)
+		err = dt.Error
+	}
+	if err != nil {
+		h.ErrorRepose(c, 400, err)
+		return
+	}
+	c.JSON(200, teams)
 }
 
 func CreateTeam(c *gin.Context) {
 	//team_name is uniq column on db, so need check existing
 	team_name := c.DefaultQuery("team_name", "")
-	if team_name == "" || utils.HasDangerousCharacters(team_name) {
-		h.ErrorRepose(c, 400, "team_name is empty or format not vaild")
+	if team_name == "" {
+		h.ErrorRepose(c, 400, "team_name is empty")
 		return
 	}
 	//allow resume empty
