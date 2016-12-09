@@ -1,7 +1,5 @@
 package uic
 
-import "time"
-
 type User struct {
 	ID     int64  `json:"id"`
 	Name   string `json:"name"`
@@ -15,11 +13,10 @@ type User struct {
 }
 
 type Team struct {
-	ID      int64     `json:"id"`
-	Name    string    `json:"name"`
-	Resume  string    `json:"resume"`
-	Creator int64     `json:"creator"`
-	Created time.Time `json:"-"`
+	ID      int64  `json:"id"`
+	Name    string `json:"name"`
+	Resume  string `json:"resume"`
+	Creator int64  `json:"creator"`
 }
 
 type RelTeamUser struct {
