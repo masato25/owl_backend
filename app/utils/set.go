@@ -8,7 +8,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func Set(list []interface{}) []interface{} {
+func UniqSet(list []interface{}) []interface{} {
 	mapTmp := map[interface{}]int{}
 	for _, s := range list {
 		if _, ok := mapTmp[s]; !ok {

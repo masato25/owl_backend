@@ -21,7 +21,7 @@ func main() {
 	config.InitDB(viper.GetBool("db.db_bug"))
 	routes := gin.Default()
 	if viper.GetBool("gen_doc") {
-		yaag.Init(&yaag.Config{On: true, DocTitle: "Gin", DocPath: "apidoc.html", BaseUrls: map[string]string{"Production": "/", "Staging": "/"}})
+		yaag.Init(&yaag.Config{On: true, DocTitle: "Gin", DocPath: viper.GetString("gen_doc_path"), BaseUrls: map[string]string{"Production": "/api/v1", "Staging": "/api/v1"}})
 		routes.Use(yaag_gin.Document())
 	}
 	controller.StartGin(viper.GetString("web_port"), routes)

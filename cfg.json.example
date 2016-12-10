@@ -6,6 +6,7 @@
     "db_bug": true
   },
   "gen_doc": false,
+  "gen_doc_path": "doc/user.html",
   "log_level": "debug",
   "salt": "----"
 }

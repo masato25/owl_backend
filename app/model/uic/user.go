@@ -12,6 +12,20 @@ type User struct {
 	Role   int    `json:"role"`
 }
 
+func (this User) IsAdmin() bool {
+	if this.Role == 2 || this.Role == 1 {
+		return true
+	}
+	return false
+}
+
+func (this User) IsSuperAdmin() bool {
+	if this.Role == 2 {
+		return true
+	}
+	return false
+}
+
 type Team struct {
 	ID      int64  `json:"id"`
 	Name    string `json:"name"`
