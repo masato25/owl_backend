@@ -17,6 +17,8 @@ All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616
 * ex. http://localhost:3000/api/v1/graph/endpoint_counter?eid=285533184,73482468&metricQuery=d.%B
 * Error 401, 400
 
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/graph.html)
+
 ### User
 
 #### Login User `/api/v1/user/login`
@@ -38,4 +40,4 @@ All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616
 * [POST]
 * ex. "name=xxx;password=xxx;cnname=xxx;email=xxx;phone=xxx;im=xxx;qq=xxx"
 
-For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/apidoc.html)
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/user.html)
