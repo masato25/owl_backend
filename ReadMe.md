@@ -3,7 +3,7 @@ web api backend made for open-falcon
 
 
 ## Base
-All error return code plaese [`refer here`](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+All error return code plaese [`refer here`](https://golang.org/src/net/http/status.go)
 
 ### Graph
 
