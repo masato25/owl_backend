@@ -104,6 +104,22 @@
             
                 <li role="presentation"><a href="#2top" role="tab" data-toggle="tab">GET : /api/v1/user/auth_session</a></li>
             
+                <li role="presentation"><a href="#3top" role="tab" data-toggle="tab">POST : /api/v1/user/create</a></li>
+            
+                <li role="presentation"><a href="#4top" role="tab" data-toggle="tab">GET : /api/v1/user/current</a></li>
+            
+                <li role="presentation"><a href="#5top" role="tab" data-toggle="tab">POST : /api/v1/user/update</a></li>
+            
+                <li role="presentation"><a href="#6top" role="tab" data-toggle="tab">POST : /api/v1/user/cgpasswd</a></li>
+            
+                <li role="presentation"><a href="#7top" role="tab" data-toggle="tab">POST : /api/v1/team/</a></li>
+            
+                <li role="presentation"><a href="#8top" role="tab" data-toggle="tab">GET : /api/v1/team/</a></li>
+            
+                <li role="presentation"><a href="#9top" role="tab" data-toggle="tab">GET : /api/v1/team/16</a></li>
+            
+                <li role="presentation"><a href="#10top" role="tab" data-toggle="tab">GET : /api/v1/team/5</a></li>
+            
         <ul>
     </div>
     <div class="col-md-8 tab-content">
@@ -433,6 +449,949 @@
                         try {
                             var jsonStr = spaceJson("{\"error\":\"not found this user\"}");
                             document.getElementById('response-body-2-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="3top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>cnname</td>
+                        <td> 翱鶚</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>email</td>
+                        <td> root123@cepave.com</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>im</td>
+                        <td> 44955834958</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>name</td>
+                        <td> owltester</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>password</td>
+                        <td> mypassword</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>phone</td>
+                        <td> 9999 9999 999</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>qq</td>
+                        <td> 182938210</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-3-0">{&#34;name&#34;:&#34;owltester&#34;,&#34;sig&#34;:&#34;a0f6b7e7beb711e6968a001500c6ca5a&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"name\":\"owltester\",\"sig\":\"a0f6b7e7beb711e6968a001500c6ca5a\"}");
+                            document.getElementById('response-body-3-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>cnname</td>
+                        <td> 翱鶚</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>email</td>
+                        <td> root123@cepave.com</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>im</td>
+                        <td> 44955834958</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>name</td>
+                        <td> root</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>password</td>
+                        <td> mypassword</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>phone</td>
+                        <td> 9999 9999 999</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>qq</td>
+                        <td> 182938210</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">400</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-3-1">{&#34;error&#34;:&#34;name is already existing&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"error\":\"name is already existing\"}");
+                            document.getElementById('response-body-3-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="4top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-4-0">{&#34;id&#34;:16,&#34;name&#34;:&#34;owltester&#34;,&#34;cnname&#34;:&#34;翱鶚&#34;,&#34;email&#34;:&#34;root123@cepave.com&#34;,&#34;phone&#34;:&#34;9999 9999 999&#34;,&#34;im&#34;:&#34;44955834958&#34;,&#34;qq&#34;:&#34;182938210&#34;,&#34;role&#34;:0}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"id\":16,\"name\":\"owltester\",\"cnname\":\"翱鶚\",\"email\":\"root123@cepave.com\",\"phone\":\"9999 9999 999\",\"im\":\"44955834958\",\"qq\":\"182938210\",\"role\":0}");
+                            document.getElementById('response-body-4-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=testsig</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">401</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-4-1">{&#34;error&#34;:&#34;session not found&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"error\":\"session not found\"}");
+                            document.getElementById('response-body-4-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="5top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  sig=testsig; name=owltester</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>cnname</td>
+                        <td> 翱鶚</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>email</td>
+                        <td> root123@cepave.com</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>im</td>
+                        <td> 44499949494</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>phone</td>
+                        <td> 0000000000</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>qq</td>
+                        <td> 213213121123</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">401</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-5-0">{&#34;error&#34;:&#34;session not found&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"error\":\"session not found\"}");
+                            document.getElementById('response-body-5-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  sig=3f22dbd7bde411e6b0ba001500c6ca5a; name=owltester</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>cnname</td>
+                        <td> 翱鶚</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>email</td>
+                        <td> root123@cepave.com</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>im</td>
+                        <td> 44499949494</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>phone</td>
+                        <td> 0000000000</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>qq</td>
+                        <td> 213213121123</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-5-1">{&#34;message&#34;:&#34;user update success!&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"message\":\"user update success!\"}");
+                            document.getElementById('response-body-5-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="6top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>new_password</td>
+                        <td> gg</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>old_password</td>
+                        <td> imtester</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">400</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-6-0">{&#34;error&#34;:&#34;oldPassword is not match current one&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"error\":\"oldPassword is not match current one\"}");
+                            document.getElementById('response-body-6-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>new_password</td>
+                        <td> mypassword</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>old_password</td>
+                        <td> mypassword</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-6-1">{&#34;message&#34;:&#34;password updated!&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"message\":\"password updated!\"}");
+                            document.getElementById('response-body-6-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="7top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                <p> <H4> URL Params </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>resume</td>
+                        <td> i&#39;m test</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>team_name</td>
+                        <td> atestteam</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-7-0">{&#34;message&#34;:&#34;team created!&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"message\":\"team created!\"}");
+                            document.getElementById('response-body-7-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="8top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-8-0">[{&#34;id&#34;:5,&#34;name&#34;:&#34;atestteam&#34;,&#34;resume&#34;:&#34;i&#39;m test&#34;,&#34;creator&#34;:16}]</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("[{\"id\":5,\"name\":\"atestteam\",\"resume\":\"i'm test\",\"creator\":16}]");
+                            document.getElementById('response-body-8-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="9top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a; name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">400</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-9-0">{&#34;error&#34;:&#34;record not found&#34;}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"error\":\"record not found\"}");
+                            document.getElementById('response-body-9-0').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="10top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Cookie</td>
+                        <td>  name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a; name=owltester; sig=3f22dbd7bde411e6b0ba001500c6ca5a</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  </td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-10-0">{&#34;id&#34;:5,&#34;name&#34;:&#34;atestteam&#34;,&#34;resume&#34;:&#34;i&#39;m test&#34;,&#34;creator&#34;:16}</pre>
+                <script>
+                     
+                    var responseHeader ={"Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"id\":5,\"name\":\"atestteam\",\"resume\":\"i'm test\",\"creator\":16}");
+                            document.getElementById('response-body-10-0').innerHTML = syntaxHighlight(jsonStr);
                         } catch (e) {
                              
                         }
