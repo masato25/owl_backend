@@ -1,17 +1,17 @@
 package utils
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-	"github.com/masato25/owl_backend/app/helper"
+	h "github.com/masato25/owl_backend/app/helper"
 )
 
 func AuthSessionMidd(c *gin.Context) {
-	auth, err := helper.SessionChecking(c)
+	auth, err := h.SessionChecking(c)
 	if err != nil || auth != true {
 		c.Set("auth", auth)
-		c.JSON(401, gin.H{
-			"error": err.Error(),
-		})
+		h.JSONR(c, http.StatusUnauthorized, err)
 		c.Abort()
 		return
 	}
