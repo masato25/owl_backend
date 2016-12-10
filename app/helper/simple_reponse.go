@@ -1,30 +1,63 @@
 package helper
 
 import (
-	"errors"
+	"encoding/json"
+	"net/http"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
-func ErrorRepose(c *gin.Context, wcode int, err interface{}) (werror error) {
-	switch err.(type) {
-	case error:
-		c.JSON(wcode, gin.H{
-			"error": err.(error).Error(),
-		})
-	case string:
-		c.JSON(wcode, gin.H{
-			"error": err.(string),
-		})
-	default:
-		werror = errors.New("type error")
-	}
-	return
+type RespJson struct {
+	Error string `json:"error,omitempty"`
+	Msg   string `json:"message,omitempty"`
 }
 
-func OkRepose(c *gin.Context, msg string) {
-	c.JSON(200, gin.H{
-		"message": msg,
-	})
+// func JSONR(c *gin.Context, wcode int, msg interface{}) (werror error) {
+func JSONR(c *gin.Context, arg ...interface{}) (werror error) {
+	var (
+		wcode int
+		msg   interface{}
+	)
+	if len(arg) == 1 {
+		wcode = http.StatusOK
+		msg = arg[0]
+	} else {
+		wcode = arg[0].(int)
+		msg = arg[1]
+	}
+	need_doc := viper.GetBool("gen_doc")
+	var body interface{}
+	defer func() {
+		if need_doc {
+			ds, _ := json.Marshal(body)
+			bodys := string(ds)
+			log.Debugf("body: %v, bodys: %v ", body, bodys)
+			c.Set("body_doc", bodys)
+		}
+	}()
+	if wcode == 200 {
+		switch msg.(type) {
+		case string:
+			body = RespJson{Msg: msg.(string)}
+			c.JSON(http.StatusOK, body)
+		default:
+			c.JSON(http.StatusOK, msg)
+			body = msg
+		}
+	} else {
+		switch msg.(type) {
+		case string:
+			body = RespJson{Error: msg.(string)}
+			c.JSON(wcode, body)
+		case error:
+			body = RespJson{Error: msg.(error).Error()}
+			c.JSON(wcode, body)
+		default:
+			body = RespJson{Error: "system type error. please ask admin for help"}
+			c.JSON(wcode, body)
+		}
+	}
 	return
 }

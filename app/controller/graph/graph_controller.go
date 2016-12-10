@@ -3,7 +3,10 @@ package graph
 import (
 	"fmt"
 
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	h "github.com/masato25/owl_backend/app/helper"
 	m "github.com/masato25/owl_backend/app/model/graph"
 	"github.com/masato25/owl_backend/app/utils"
 )
@@ -11,9 +14,7 @@ import (
 func EndpointRegexpQuery(c *gin.Context) {
 	q := c.DefaultQuery("q", "")
 	if q == "" {
-		c.JSON(400, gin.H{
-			"error": "q is missing",
-		})
+		h.JSONR(c, http.StatusBadRequest, "q is missing")
 	} else {
 		var endpoint []m.Endpoint
 		db.Graph.Table("endpoint").Select("endpoint, id").Where("endpoint regexp ?", q).Scan(&endpoint)
@@ -21,7 +22,7 @@ func EndpointRegexpQuery(c *gin.Context) {
 		for _, e := range endpoint {
 			endpoints = append(endpoints, map[string]interface{}{"id": e.ID, "endpoint": e.Endpoint})
 		}
-		c.JSON(200, endpoints)
+		h.JSONR(c, endpoints)
 	}
 	return
 }
@@ -30,15 +31,11 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 	eid := c.DefaultQuery("eid", "")
 	metricQuery := c.DefaultQuery("metricQuery", ".+")
 	if eid == "" {
-		c.JSON(400, gin.H{
-			"error": "eid is missing",
-		})
+		h.JSONR(c, http.StatusBadRequest, "eid is missing")
 	} else {
 		eids := utils.ConverIntStringToList(eid)
 		if eids == "" {
-			c.JSON(400, gin.H{
-				"error": "input error, please check your input info.",
-			})
+			h.JSONR(c, http.StatusBadRequest, "input error, please check your input info.")
 			return
 		} else {
 			eids = fmt.Sprintf("(%s)", eids)
@@ -49,7 +46,7 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 		for _, c := range counters {
 			countersResp = append(countersResp, c.Counter)
 		}
-		c.JSON(200, utils.Set(countersResp))
+		h.JSONR(c, utils.UniqSet(countersResp))
 	}
 	return
 }
