@@ -24,5 +24,13 @@ func main() {
 		yaag.Init(&yaag.Config{On: true, DocTitle: "Gin", DocPath: viper.GetString("gen_doc_path"), BaseUrls: map[string]string{"Production": "/api/v1", "Staging": "/api/v1"}})
 		routes.Use(yaag_gin.Document())
 	}
+	routes.Use(func(c *gin.Context) {
+		// Run this on all requests
+		// Should be moved to a proper middleware
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type,Token")
+		c.Next()
+	})
+
 	controller.StartGin(viper.GetString("web_port"), routes)
 }
