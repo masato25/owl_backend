@@ -18,6 +18,8 @@ type WebSession struct {
 func GetSession(c *gin.Context) (session WebSession, err error) {
 	var name, sig string
 	name, err = c.Cookie("name")
+	s := c.Request.Cookies()
+	log.Debugf("%v", s)
 	if name == "" {
 		name = c.DefaultQuery("name", "")
 	}
