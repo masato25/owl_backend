@@ -3,6 +3,8 @@ package helper
 import (
 	"errors"
 
+	log "github.com/Sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
 	"github.com/masato25/owl_backend/app/model/uic"
 	"github.com/masato25/owl_backend/config"
@@ -19,6 +21,7 @@ func GetSession(c *gin.Context) (session WebSession, err error) {
 	if name == "" {
 		name = c.DefaultQuery("name", "")
 	}
+	log.Debugf("session got name: %s", name)
 	if err != nil {
 		return
 	}
@@ -26,6 +29,7 @@ func GetSession(c *gin.Context) (session WebSession, err error) {
 	if sig == "" {
 		sig = c.DefaultQuery("sig", "")
 	}
+	log.Debugf("session got sig: %s", sig)
 	if err != nil {
 		return
 	}
