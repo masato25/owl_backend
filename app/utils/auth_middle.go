@@ -11,7 +11,7 @@ import (
 
 func AuthSessionMidd(c *gin.Context) {
 	auth, err := h.SessionChecking(c)
-	if err != nil || auth != true || viper.GetBool("skip_auth") {
+	if (err != nil || auth != true) && viper.GetBool("skip_auth") != true {
 		log.Debugf("error: %v, auth: %v", err.Error(), auth)
 		c.Set("auth", auth)
 		h.JSONR(c, http.StatusUnauthorized, err)
