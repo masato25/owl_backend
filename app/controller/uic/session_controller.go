@@ -45,9 +45,10 @@ func Login(c *gin.Context) {
 	}
 	log.Debugf("session: %v", session)
 	resp := struct {
-		Sig  string `json:"sig,omitempty"`
-		Name string `json:"name,omitempty"`
-	}{session.Sig, user.Name}
+		Sig   string `json:"sig,omitempty"`
+		Name  string `json:"name,omitempty"`
+		Admin bool   `json:"admin"`
+	}{session.Sig, user.Name, user.IsAdmin()}
 	h.JSONR(c, resp)
 	return
 }

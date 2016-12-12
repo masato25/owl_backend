@@ -25,10 +25,10 @@ func Routes(r *gin.Engine) {
 	authapi := r.Group("/api/v1/user")
 	authapi.Use(utils.AuthSessionMidd)
 	authapi.GET("/current", UserInfo)
-	authapi.POST("/update", UserUpdate)
+	authapi.POST("/update", UpdateUser)
 	authapi.POST("/cgpasswd", ChangePassword)
-	//pending
-	// authapi.GET("/", AllUsers)
+	authapi.GET("/users", UserList)
+	authapi.POST("/cgrole", ChangeRuleOfUser)
 
 	//team
 	authapi_team := r.Group("/api/v1/team")

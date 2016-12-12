@@ -1,11 +1,11 @@
 package uic
 
 type User struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	Cnname string `json:"cnname"`
-	Passwd string `json:"-"`
-	Email  string `json:"email"`
+	ID     int64  `json:"id" `
+	Name   string `json:"name" binding:"required"`
+	Cnname string `json:"cnname" binding:"required"`
+	Passwd string `json:"-" binding:"required"`
+	Email  string `json:"email" binding:"required"`
 	Phone  string `json:"phone"`
 	IM     string `json:"im" gorm:"column:im"`
 	QQ     string `json:"qq" gorm:"column:qq"`
