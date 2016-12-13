@@ -40,4 +40,55 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 * [POST]
 * ex. "name=xxx;password=xxx;cnname=xxx;email=xxx;phone=xxx;im=xxx;qq=xxx"
 
+#### Update User `/api/v1/user/update`
+* [PUT]
+
+#### Change User password `/api/v1/user/cgpasswd`
+* [PUT]
+
+#### User list `/api/v1/user/users`
+* [GET]
+* supprot regexp ex. q=a.+
+
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/user.html)
+### Admin
+
+#### (Admin) Change User role `/api/v1/admim/change_user_role`
+* [PUT]
+
+#### (Admin) Change User password `/api/v1/admim//change_user_passwd`
+* [PUT]
+
+#### (Admin) Delete A user `/api/v1/admin/delete_user`
+* [DELETE]
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/admin.html)
+
+### Team
+
+#### Get Team List `/api/v1/team`
+* [GET]
+* support regexp query ex. "q=a.+"
+
+### Get Team by id `/api/v1/team/:team_id`
+* [GET]
+* ex. /api/v1/team/1
+
+### Create A team  `/api/v1/team`
+* [POST]
+* ex. params
+* team_name `name of team`
+* resume `descript of this team`
+* users `team member list (user id)`
+
+### Update A team `/team`
+* [PUT]
+* team_id `team_id of db's primary key`
+* resume `descript of this team`
+* users `team member list (user id)`
+
+### Delete A team `/team/:team_id`
+* [DELETE]
+* ex. /api/v1/team/1
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/team.html)
