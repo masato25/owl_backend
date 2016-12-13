@@ -43,7 +43,7 @@ func TestCUser(t *testing.T) {
 			resp, _ := rt.R().
 				SetHeader("Content-Type", "application/json").
 				SetBody(`{"name": "test1","password": "test1", "cnname": "翱鶚Test", "email": "root123@cepave.com", "im": "44955834958", "phone": "99999999999", "qq": "904394234239"}`).
-				Post(fmt.Sprintf("%s/user/update", host))
+				Put(fmt.Sprintf("%s/user/update", host))
 			So(resp.StatusCode(), ShouldEqual, 200)
 
 			Convey("Update User Password", func() {
@@ -54,7 +54,7 @@ func TestCUser(t *testing.T) {
 				resp, _ := rt.R().
 					SetHeader("Content-Type", "application/json").
 					SetBody(`{"new_password": "test1", "old_password": "test1"}`).
-					Post(fmt.Sprintf("%s/user/cgpasswd", host))
+					Put(fmt.Sprintf("%s/user/cgpasswd", host))
 				So(resp.StatusCode(), ShouldEqual, 200)
 			})
 		})
@@ -69,27 +69,27 @@ func TestCUser(t *testing.T) {
 		So(resp.StatusCode(), ShouldEqual, 200)
 	})
 
-	Convey("Change User Role as Admin", t, func() {
-		cname := "root"
-		csig := "dd81ea033c2d11e6a95d0242ac11000c"
-		rt := resty.New()
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
-		resp, _ := rt.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(`{"user_id": 4, "admin": "yes"}`).
-			Post(fmt.Sprintf("%s/user/cgrole", host))
-		So(resp.StatusCode(), ShouldEqual, 200)
-	})
-
-	Convey("Change User Role as normal user", t, func() {
-		cname := "root"
-		csig := "dd81ea033c2d11e6a95d0242ac11000c"
-		rt := resty.New()
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
-		resp, _ := rt.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(`{"user_id": 4, "admin": "no"}`).
-			Post(fmt.Sprintf("%s/user/cgrole", host))
-		So(resp.StatusCode(), ShouldEqual, 200)
-	})
+	// Convey("Change User Role as Admin", t, func() {
+	// 	cname := "root"
+	// 	csig := "dd81ea033c2d11e6a95d0242ac11000c"
+	// 	rt := resty.New()
+	// 	rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+	// 	resp, _ := rt.R().
+	// 		SetHeader("Content-Type", "application/json").
+	// 		SetBody(`{"user_id": 4, "admin": "yes"}`).
+	// 		Put(fmt.Sprintf("%s/user/cgrole", host))
+	// 	So(resp.StatusCode(), ShouldEqual, 200)
+	// })
+	//
+	// Convey("Change User Role as normal user", t, func() {
+	// 	cname := "root"
+	// 	csig := "dd81ea033c2d11e6a95d0242ac11000c"
+	// 	rt := resty.New()
+	// 	rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+	// 	resp, _ := rt.R().
+	// 		SetHeader("Content-Type", "application/json").
+	// 		SetBody(`{"user_id": 4, "admin": "no"}`).
+	// 		Put(fmt.Sprintf("%s/user/cgrole", host))
+	// 	So(resp.StatusCode(), ShouldEqual, 200)
+	// })
 }

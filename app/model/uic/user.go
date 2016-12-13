@@ -54,4 +54,8 @@ func (this User) TableName() string {
 	return "user"
 }
 
+func (this RelTeamUser) TableName() string {
+	return "rel_team_user"
+}
+
 //db.SingularTable(true)

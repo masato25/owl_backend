@@ -162,33 +162,43 @@ func UserInfo(c *gin.Context) {
 	return
 }
 
+type APIAdminUserDeleteInput struct {
+	UserID int `json:"user_id" binding:"required"`
+}
+
 //admin usage
 func AdminUserDelete(c *gin.Context) {
-	inputs := struct {
-		UserID int `json:"name" binding:"required"`
-	}{}
-	websession, _ := h.GetSession(c)
-	user := uic.User{Name: websession.Name}
-	db.Uic.Where(&user).Find(&user)
-	if !user.IsAdmin() {
-		h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
+	var inputs APIAdminUserDeleteInput
+	err := c.Bind(&inputs)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
 		return
 	}
-	err := db.Uic.Table("user").Delete("id = ?", inputs.UserID)
+	cuser, err := h.GetUser(c)
 	if err != nil {
 		h.JSONR(c, http.StatusExpectationFailed, err)
 		return
+	} else if !cuser.IsAdmin() {
+		h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
+		return
 	}
-	h.JSONR(c, fmt.Sprintf("user %v has been delete.", inputs.UserID))
+	dt := db.Uic.Delete(&uic.User{}, inputs.UserID)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+	h.JSONR(c, fmt.Sprintf("user %v has been delete, affect row: %v", inputs.UserID, dt.RowsAffected))
 	return
+}
+
+type APIAdminChangePassword struct {
+	UserID int    `json:"user_id" binding:"required"`
+	Passwd string `json:"password" binding:"required"`
 }
 
 //admin usage
 func AdminChangePassword(c *gin.Context) {
-	inputs := struct {
-		UserID int    `json:"user_id" binding:"required"`
-		Passwd string `json:"password" binding:"required"`
-	}{}
+	var inputs APIAdminChangePassword
 	err := c.Bind(&inputs)
 	if err != nil {
 		h.JSONR(c, http.StatusBadRequest, err)
@@ -275,10 +285,7 @@ func ChangeRuleOfUser(c *gin.Context) {
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
-	} else if dt.RowsAffected == 0 {
-		h.JSONR(c, http.StatusExpectationFailed, "user: %v not existing", inputs.UserID)
-		return
 	}
-	h.JSONR(c, "user role update sccuessful")
+	h.JSONR(c, fmt.Sprintf("user role update sccuessful, affect row: %v", dt.RowsAffected))
 	return
 }

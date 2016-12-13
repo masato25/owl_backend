@@ -34,55 +34,122 @@ func Teams(c *gin.Context) {
 	return
 }
 
+type APICreateTeamInput struct {
+	Name    string  `json:"team_name" binding:"required"`
+	Resume  string  `json:"resume"`
+	UserIDs []int64 `json:"users"`
+}
+
 func CreateTeam(c *gin.Context) {
+	var cteam APICreateTeamInput
+	err := c.Bind(&cteam)
 	//team_name is uniq column on db, so need check existing
-	team_name := c.DefaultQuery("team_name", "")
-	if team_name == "" {
-		h.JSONR(c, badstatus, "team_name is empty")
+	// team_name := c.DefaultQuery("team_name", "")
+	if err != nil {
+		h.JSONR(c, badstatus, err)
 		return
 	}
-	//allow resume empty
-	resume := c.DefaultQuery("resume", "")
-	websession, _ := h.GetSession(c)
-	user := uic.User{
-		Name: websession.Name,
-	}
-	dt := db.Uic.Where(&user).Find(&user)
-	if user.ID == 0 {
+	user, err := h.GetUser(c)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	} else if user.ID == 0 {
 		h.JSONR(c, badstatus, "not found this user")
-		return
-	} else if dt.Error != nil {
-		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
 	team := uic.Team{
-		Name:    team_name,
-		Resume:  resume,
+		Name:    cteam.Name,
+		Resume:  cteam.Resume,
 		Creator: user.ID,
 	}
-	dt = db.Uic.Save(&team)
+	dt := db.Uic.Save(&team)
 	if dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return
+	}
+	if len(cteam.UserIDs) > 0 {
+		rel_team_user := make([]uic.RelTeamUser, len(cteam.UserIDs))
+		for indx, r := range rel_team_user {
+			r.Tid = team.ID
+			r.Uid = cteam.UserIDs[indx]
+		}
+		dt := db.Uic.Table("rel_team_user").Save(rel_team_user)
+		if dt.Error != nil {
+			h.JSONR(c, badstatus, dt.Error)
+			return
+		}
 	}
 	h.JSONR(c, "team created!")
 	return
 }
 
-func DeleteTeam(c *gin.Context) {
-	team_name := c.DefaultQuery("team_name", "")
-	if team_name == "" {
-		h.JSONR(c, badstatus, "team_name is empty")
+type APIUpdateTeamInput struct {
+	ID      int64   `json:"team_id" binding:"required"`
+	Resume  string  `json:"resume"`
+	UserIDs []int64 `json:"users"`
+}
+
+func UpdateTeam(c *gin.Context) {
+	var cteam APIUpdateTeamInput
+	err := c.Bind(&cteam)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
 		return
 	}
-	var err error
-	user, _ := h.GetUser(c)
+	user, err := h.GetUser(c)
+	dt := db.Uic.Table("team")
+	if err != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	} else if user.IsAdmin() {
+		dt = dt.Where("id = ?", cteam.ID)
+	} else {
+		dt = dt.Where("creator = ? AND id = ?", user.ID, cteam.ID)
+	}
+	dt = dt.Update(&uic.Team{Resume: cteam.Resume})
+	if dt.Error != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	} else {
+		if len(cteam.UserIDs) > 0 {
+			rel_team_user := make([]uic.RelTeamUser, len(cteam.UserIDs))
+			for indx, r := range rel_team_user {
+				r.Tid = cteam.ID
+				r.Uid = cteam.UserIDs[indx]
+			}
+			dt = db.Uic.Table("rel_team_user").Save(rel_team_user)
+			if dt.Error != nil {
+				h.JSONR(c, badstatus, dt.Error)
+				return
+			}
+		}
+	}
+	h.JSONR(c, fmt.Sprintf("team updated!, affect row: %v", dt.RowsAffected))
+	return
+}
+
+type APIDeleteTeamInput struct {
+	Name string `json:"team_name" binding:"required"`
+}
+
+func DeleteTeam(c *gin.Context) {
+	var cteam APIDeleteTeamInput
+	err := c.Bind(&cteam)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
+	user, err := h.GetUser(c)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	if user.IsAdmin() {
-		dt := db.Uic.Table("team").Delete("name = ?", team_name)
+		dt := db.Uic.Table("team").Delete("name = ?", cteam.Name)
 		err = dt.Error
 	} else {
 		team := uic.Team{
-			Name:    team_name,
+			Name:    cteam.Name,
 			Creator: user.ID,
 		}
 		dt := db.Uic.Where(&team).Find(&team)
@@ -94,11 +161,7 @@ func DeleteTeam(c *gin.Context) {
 			db.Uic.Delete(&team)
 		}
 	}
-	if err != nil {
-		h.JSONR(c, badstatus, err)
-		return
-	}
-	h.JSONR(c, fmt.Sprintf("team %s is deleted.", team_name))
+	h.JSONR(c, fmt.Sprintf("team %s is deleted.", cteam.Name))
 	return
 }
 
@@ -120,40 +183,4 @@ func GetTeam(c *gin.Context) {
 	}
 	h.JSONR(c, team)
 	return
-}
-
-func UpdateTeam(c *gin.Context) {
-	team_id_str := c.Params.ByName("team_id")
-	team_id, err := strconv.Atoi(team_id_str)
-	//team_name is uniq column on db, so need check existing
-	team_name := c.DefaultQuery("team_name", "")
-	if team_name == "" || team_id == 0 {
-		h.JSONR(c, badstatus, "team_name or team_id is empty")
-		return
-	} else if err != nil {
-		h.JSONR(c, badstatus, err.Error())
-		return
-	}
-	//allow resume empty
-	resume := c.DefaultQuery("resume", "")
-	websession, _ := h.GetSession(c)
-	user := uic.User{
-		Name: websession.Name,
-	}
-	team := uic.Team{
-		Name:   team_name,
-		Resume: resume,
-	}
-	if user.IsAdmin() {
-		dt := db.Uic.Table("team").Where("id = ?", team_id).Update(&team)
-		err = dt.Error
-	} else {
-		dt := db.Uic.Table("name").Where("creator = ?", user.ID).Update(&team)
-		err = dt.Error
-	}
-	if err != nil {
-		h.JSONR(c, badstatus, err)
-		return
-	}
-	h.JSONR(c, "team updated!")
 }
