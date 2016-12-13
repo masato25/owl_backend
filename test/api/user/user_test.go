@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"net/http"
 	"testing"
 
 	log "github.com/Sirupsen/logrus"
@@ -41,7 +40,9 @@ func TestUser(t *testing.T) {
 			Post(fmt.Sprintf("%s/user/login", host))
 		jss, err := gojq.NewStringQuery(resp.String())
 		sig, err := jss.Query("sig")
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", "test2"), rt.MakeTestCookie("sig", sig.(string))})
+		Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, "test2", sig.(string))
+		rt = resty.New()
+		rt.SetHeader("Apitoken", Apitoken)
 		resp, err = rt.R().Get(fmt.Sprintf("%s/user/logout", host))
 		if err != nil {
 			log.Error(err.Error())
@@ -52,8 +53,9 @@ func TestUser(t *testing.T) {
 	Convey("Session checking success", t, func() {
 		cname := "test1"
 		csig := "d4f71cba377911e699d60242ac110010"
+		Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 		rt := resty.New()
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+		rt.SetHeader("Apitoken", Apitoken)
 		resp, err := rt.R().Get(fmt.Sprintf("%s/user/auth_session", host))
 		if err != nil {
 			log.Error(err.Error())
@@ -64,8 +66,9 @@ func TestUser(t *testing.T) {
 	Convey("Session checking failed", t, func() {
 		cname := "testtest"
 		csig := "9a84ae1d377911e699d60242ac110010"
+		Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 		rt := resty.New()
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+		rt.SetHeader("Apitoken", Apitoken)
 		resp, err := rt.R().Get(fmt.Sprintf("%s/user/auth_session", host))
 		if err != nil {
 			log.Error(err.Error())

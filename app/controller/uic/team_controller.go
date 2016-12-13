@@ -3,16 +3,21 @@ package uic
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
-	"github.com/masato25/owl_backend/app/model/uic"
+	"github.com/masato25/owl_backend/app/utils"
+	"github.com/masato25/owl_backend/config"
+	"github.com/masato25/owl_backend_test/app/model/uic"
 )
 
 //support root as admin
 func Teams(c *gin.Context) {
-	query := c.DefaultQuery("query", ".+")
+	query := c.DefaultQuery("q", ".+")
 	user, err := h.GetUser(c)
 	if err != nil {
 		h.JSONR(c, 400, err)
@@ -67,26 +72,28 @@ func CreateTeam(c *gin.Context) {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
+	var dt2 *gorm.DB
 	if len(cteam.UserIDs) > 0 {
-		rel_team_user := make([]uic.RelTeamUser, len(cteam.UserIDs))
-		for indx, r := range rel_team_user {
-			r.Tid = team.ID
-			r.Uid = cteam.UserIDs[indx]
+		for i := 0; i < len(cteam.UserIDs); i++ {
+			dt2 = db.Uic.Save(&uic.RelTeamUser{Tid: team.ID, Uid: cteam.UserIDs[i]})
+			if dt2.Error != nil {
+				err = dt2.Error
+				break
+			}
 		}
-		dt := db.Uic.Table("rel_team_user").Save(rel_team_user)
-		if dt.Error != nil {
-			h.JSONR(c, badstatus, dt.Error)
+		if err != nil {
+			h.JSONR(c, badstatus, err)
 			return
 		}
 	}
-	h.JSONR(c, "team created!")
+	h.JSONR(c, fmt.Sprintf("team created! Afftect row: %d, Affect refer: %d", dt.RowsAffected, len(cteam.UserIDs)))
 	return
 }
 
 type APIUpdateTeamInput struct {
-	ID      int64   `json:"team_id" binding:"required"`
-	Resume  string  `json:"resume"`
-	UserIDs []int64 `json:"users"`
+	ID      int    `json:"team_id" binding:"required"`
+	Resume  string `json:"resume"`
+	UserIDs []int  `json:"users"`
 }
 
 func UpdateTeam(c *gin.Context) {
@@ -99,6 +106,7 @@ func UpdateTeam(c *gin.Context) {
 	user, err := h.GetUser(c)
 	dt := db.Uic.Table("team")
 	if err != nil {
+		dt.Rollback()
 		h.JSONR(c, badstatus, err)
 		return
 	} else if user.IsAdmin() {
@@ -106,37 +114,78 @@ func UpdateTeam(c *gin.Context) {
 	} else {
 		dt = dt.Where("creator = ? AND id = ?", user.ID, cteam.ID)
 	}
-	dt = dt.Update(&uic.Team{Resume: cteam.Resume})
+	var team uic.Team
+	dt = dt.Find(&team)
 	if dt.Error != nil {
-		h.JSONR(c, badstatus, err)
+		h.JSONR(c, badstatus, dt.Error)
 		return
-	} else {
-		if len(cteam.UserIDs) > 0 {
-			rel_team_user := make([]uic.RelTeamUser, len(cteam.UserIDs))
-			for indx, r := range rel_team_user {
-				r.Tid = cteam.ID
-				r.Uid = cteam.UserIDs[indx]
-			}
-			dt = db.Uic.Table("rel_team_user").Save(rel_team_user)
+	}
+	if team.ID != 0 {
+		err := bindUsers(db, cteam.ID, cteam.UserIDs)
+		if err != nil {
+			h.JSONR(c, badstatus, err)
+		}
+	}
+	h.JSONR(c, "team updated!")
+	return
+}
+
+func bindUsers(db config.DBPool, tid int, users []int) (err error) {
+	var dt *gorm.DB
+	uids, err := utils.ArrIntToString(users)
+	if err != nil {
+		return
+	}
+	//delete unbind users
+	var needDeleteMan []uic.RelTeamUser
+	qPared := fmt.Sprintf("tid = %d AND NOT (uid IN (%v))", tid, uids)
+	log.Debug(qPared)
+	dt = db.Uic.Table("rel_team_user").Where(qPared).Find(&needDeleteMan)
+	if dt.Error != nil {
+		err = dt.Error
+		return
+	}
+	if len(needDeleteMan) != 0 {
+		for _, man := range needDeleteMan {
+			dt = db.Uic.Delete(&man)
 			if dt.Error != nil {
-				h.JSONR(c, badstatus, dt.Error)
+				err = dt.Error
 				return
 			}
 		}
 	}
-	h.JSONR(c, fmt.Sprintf("team updated!, affect row: %v", dt.RowsAffected))
+	//insert bind users
+	for _, i := range users {
+		ur := uic.RelTeamUser{Tid: int64(tid), Uid: int64(i)}
+		db.Uic.Where(&ur).Find(&ur)
+		if ur.ID == 0 {
+			dt = db.Uic.Save(&ur)
+		} else {
+			//if record exsint, do next
+			continue
+		}
+		if dt.Error != nil {
+			err = dt.Error
+			return
+		}
+	}
 	return
 }
 
 type APIDeleteTeamInput struct {
-	Name string `json:"team_name" binding:"required"`
+	ID int64 `json:"team_id" binding:"required"`
 }
 
 func DeleteTeam(c *gin.Context) {
-	var cteam APIDeleteTeamInput
-	err := c.Bind(&cteam)
-	if err != nil {
-		h.JSONR(c, badstatus, err.Error())
+	var err error
+	teamIdStr := c.Params.ByName("team_id")
+	teamIdTmp, err := strconv.Atoi(teamIdStr)
+	teamId := int64(teamIdTmp)
+	if teamId == 0 {
+		h.JSONR(c, badstatus, "team_id is empty")
+		return
+	} else if err != nil {
+		h.JSONR(c, badstatus, err)
 		return
 	}
 	user, err := h.GetUser(c)
@@ -144,25 +193,38 @@ func DeleteTeam(c *gin.Context) {
 		h.JSONR(c, badstatus, err.Error())
 		return
 	}
+	dt := db.Uic.Table("team")
 	if user.IsAdmin() {
-		dt := db.Uic.Table("team").Delete("name = ?", cteam.Name)
+		dt = dt.Delete(&uic.Team{ID: teamId})
 		err = dt.Error
 	} else {
 		team := uic.Team{
-			Name:    cteam.Name,
+			ID:      teamId,
 			Creator: user.ID,
 		}
-		dt := db.Uic.Where(&team).Find(&team)
+		dt = dt.Where(&team).Find(&team)
 		if team.ID == 0 {
 			err = errors.New("You don't have permission")
 		} else if dt.Error != nil {
 			err = dt.Error
 		} else {
-			db.Uic.Delete(&team)
+			db.Uic.Delete(&uic.Team{ID: team.ID})
 		}
 	}
-	h.JSONR(c, fmt.Sprintf("team %s is deleted.", cteam.Name))
+	var dt2 *gorm.DB
+	if err != nil {
+		h.JSONR(c, http.StatusExpectationFailed, err)
+		return
+	} else {
+		dt2 = db.Uic.Delete(uic.RelTeamUser{Tid: teamId})
+	}
+	h.JSONR(c, fmt.Sprintf("team %v is deleted. Affect row: %d / refer delete: %d", teamId, dt.RowsAffected, dt2.RowsAffected))
 	return
+}
+
+type APIGetTeamOutput struct {
+	uic.Team
+	Users []uic.User `json:"users"`
 }
 
 func GetTeam(c *gin.Context) {
@@ -176,11 +238,33 @@ func GetTeam(c *gin.Context) {
 		return
 	}
 	team := uic.Team{ID: int64(team_id)}
-	dt := db.Uic.Where(&team).Find(&team)
+	dt := db.Uic.Find(&team)
 	if dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
-	h.JSONR(c, team)
+	var uidarr []uic.RelTeamUser
+	db.Uic.Table("rel_team_user").Select("uid").Where(&uic.RelTeamUser{Tid: int64(team_id)}).Find(&uidarr)
+	if err != nil {
+		log.Debug(err.Error())
+	}
+	var resp APIGetTeamOutput
+	resp.Team = team
+	resp.Users = []uic.User{}
+	if len(uidarr) != 0 {
+		uids := ""
+		for indx, v := range uidarr {
+			if indx == 0 {
+				uids = fmt.Sprintf("%v", v.Uid)
+			} else {
+				uids = fmt.Sprintf("%v,%v", uids, v.Uid)
+			}
+		}
+		log.Debugf("uids:%s", uids)
+		var users []uic.User
+		db.Uic.Table("user").Where(fmt.Sprintf("id IN (%s)", uids)).Find(&users)
+		resp.Users = users
+	}
+	h.JSONR(c, resp)
 	return
 }

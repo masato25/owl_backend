@@ -33,12 +33,6 @@ type Team struct {
 	Creator int64  `json:"creator"`
 }
 
-type RelTeamUser struct {
-	ID  int64
-	Tid int64
-	Uid int64
-}
-
 type Session struct {
 	ID      int64
 	Uid     int64
@@ -52,10 +46,6 @@ func (this Session) TableName() string {
 
 func (this User) TableName() string {
 	return "user"
-}
-
-func (this RelTeamUser) TableName() string {
-	return "rel_team_user"
 }
 
 //db.SingularTable(true)

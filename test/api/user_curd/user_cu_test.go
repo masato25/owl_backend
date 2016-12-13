@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"net/http"
 	"testing"
 
 	log "github.com/Sirupsen/logrus"
@@ -38,8 +37,9 @@ func TestCUser(t *testing.T) {
 		Convey("Update User Scuessed", func() {
 			cname := "test1"
 			csig := "d4f71cba377911e699d60242ac110010"
+			Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 			rt := resty.New()
-			rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+			rt.SetHeader("Apitoken", Apitoken)
 			resp, _ := rt.R().
 				SetHeader("Content-Type", "application/json").
 				SetBody(`{"name": "test1","password": "test1", "cnname": "翱鶚Test", "email": "root123@cepave.com", "im": "44955834958", "phone": "99999999999", "qq": "904394234239"}`).
@@ -49,8 +49,9 @@ func TestCUser(t *testing.T) {
 			Convey("Update User Password", func() {
 				cname := "test1"
 				csig := "d4f71cba377911e699d60242ac110010"
+				Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 				rt := resty.New()
-				rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+				rt.SetHeader("Apitoken", Apitoken)
 				resp, _ := rt.R().
 					SetHeader("Content-Type", "application/json").
 					SetBody(`{"new_password": "test1", "old_password": "test1"}`).
@@ -63,8 +64,9 @@ func TestCUser(t *testing.T) {
 	Convey("Get User List", t, func() {
 		cname := "test1"
 		csig := "d4f71cba377911e699d60242ac110010"
+		Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 		rt := resty.New()
-		rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+		rt.SetHeader("Apitoken", Apitoken)
 		resp, _ := rt.R().Get(fmt.Sprintf("%s/user/users", host))
 		So(resp.StatusCode(), ShouldEqual, 200)
 	})
@@ -72,8 +74,9 @@ func TestCUser(t *testing.T) {
 	// Convey("Change User Role as Admin", t, func() {
 	// 	cname := "root"
 	// 	csig := "dd81ea033c2d11e6a95d0242ac11000c"
+	// 	Apitoken := fmt.Sprintf(`{"name": "%s", "sig": "%s"}`, cname, csig)
 	// 	rt := resty.New()
-	// 	rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+	// 	rt.SetHeader("Apitoken", Apitoken)
 	// 	resp, _ := rt.R().
 	// 		SetHeader("Content-Type", "application/json").
 	// 		SetBody(`{"user_id": 4, "admin": "yes"}`).
@@ -85,7 +88,7 @@ func TestCUser(t *testing.T) {
 	// 	cname := "root"
 	// 	csig := "dd81ea033c2d11e6a95d0242ac11000c"
 	// 	rt := resty.New()
-	// 	rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+	// 	rt.SetHeader("Apitoken", Apitoken)
 	// 	resp, _ := rt.R().
 	// 		SetHeader("Content-Type", "application/json").
 	// 		SetBody(`{"user_id": 4, "admin": "no"}`).

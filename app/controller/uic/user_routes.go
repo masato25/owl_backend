@@ -35,11 +35,11 @@ func Routes(r *gin.Engine) {
 	adminapi.DELETE("/delete_user", AdminUserDelete)
 
 	//team
-	authapi_team := r.Group("/api/v1/team")
+	authapi_team := r.Group("/api/v1")
 	authapi_team.Use(utils.AuthSessionMidd)
-	authapi_team.GET("/", Teams)
-	authapi_team.GET("/:team_id", GetTeam)
-	authapi_team.POST("/", CreateTeam)
-	authapi_team.PUT("/:team_id", UpdateTeam)
-	authapi_team.DELETE("/:team_id", DeleteTeam)
+	authapi_team.GET("/team", Teams)
+	authapi_team.GET("/team/:team_id", GetTeam)
+	authapi_team.POST("/team", CreateTeam)
+	authapi_team.PUT("/team", UpdateTeam)
+	authapi_team.DELETE("/team/:team_id", DeleteTeam)
 }

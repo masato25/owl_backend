@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"net/http"
 	"testing"
 
 	log "github.com/Sirupsen/logrus"
@@ -18,10 +17,11 @@ func TestGraph(t *testing.T) {
 	viper.ReadInConfig()
 	log.SetLevel(log.DebugLevel)
 	host := "http://localhost:3000/api/v1/graph"
-	cname := "test1"
-	csig := "d4f71cba377911e699d60242ac110010"
+	// cname := "test1"
+	// csig := "d4f71cba377911e699d60242ac110010"
+	Apitoken := `{"name": "test1", "sig": "d4f71cba377911e699d60242ac110010"}`
 	rt := resty.New()
-	rt.SetCookies([]*http.Cookie{rt.MakeTestCookie("name", cname), rt.MakeTestCookie("sig", csig)})
+	rt.SetHeader("Apitoken", Apitoken)
 	Convey("Get Endpoint Failed", t, func() {
 		resp, _ := rt.R().Get(fmt.Sprintf("%s/endpoint", host))
 		So(resp.StatusCode(), ShouldEqual, 400)
