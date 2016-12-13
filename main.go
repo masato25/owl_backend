@@ -21,7 +21,12 @@ func main() {
 	config.InitDB(viper.GetBool("db.db_bug"))
 	routes := gin.Default()
 	if viper.GetBool("gen_doc") {
-		yaag.Init(&yaag.Config{On: true, DocTitle: "Gin", DocPath: viper.GetString("gen_doc_path"), BaseUrls: map[string]string{"Production": "/api/v1", "Staging": "/api/v1"}})
+		yaag.Init(&yaag.Config{
+			On:       true,
+			DocTitle: "Gin",
+			DocPath:  viper.GetString("gen_doc_path"),
+			BaseUrls: map[string]string{"Production": "/api/v1", "Staging": "/api/v1"},
+		})
 		routes.Use(yaag_gin.Document())
 	}
 	routes.Use(func(c *gin.Context) {

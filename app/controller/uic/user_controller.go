@@ -153,11 +153,9 @@ func ChangePassword(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-	websession, _ := h.GetSession(c)
-	user := uic.User{Name: websession.Name}
-	dt := db.Uic.Where(&user).Find(&user)
-	if dt.Error != nil {
-		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+	user, err := h.GetUser(c)
+	if err != nil {
+		h.JSONR(c, http.StatusExpectationFailed, err)
 		return
 	}
 	h.JSONR(c, http.StatusOK, user)
@@ -231,8 +229,9 @@ func UserList(c *gin.Context) {
 	// 	h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
 	// 	return
 	// }
+	q := c.DefaultQuery("q", ".+")
 	var user []uic.User
-	dt := db.Uic.Table("user").Scan(&user)
+	dt := db.Uic.Table("user").Where("name regexp ?", q).Scan(&user)
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
