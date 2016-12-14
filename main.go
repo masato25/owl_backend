@@ -29,13 +29,5 @@ func main() {
 		})
 		routes.Use(yaag_gin.Document())
 	}
-	routes.Use(func(c *gin.Context) {
-		// Run this on all requests
-		// Should be moved to a proper middleware
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type,Token,Apitoken")
-		c.Next()
-	})
-
 	controller.StartGin(viper.GetString("web_port"), routes)
 }
