@@ -1,5 +1,9 @@
 package uic
 
+import (
+	"github.com/masato25/owl_backend/config"
+)
+
 type RelTeamUser struct {
 	ID  int64
 	Tid int64
@@ -8,4 +12,9 @@ type RelTeamUser struct {
 
 func (this RelTeamUser) TableName() string {
 	return "rel_team_user"
+}
+
+func (this RelTeamUser) Me() {
+	db := config.Con()
+	db.Uic.Where("id = 1")
 }
