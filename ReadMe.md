@@ -92,3 +92,7 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 * ex. /api/v1/team/1
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/team.html)
+
+### Template
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/template.html)
