@@ -93,6 +93,6 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/team.html)
 
-### Template
+### Template / Strategy
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/template.html)
