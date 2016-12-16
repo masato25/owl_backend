@@ -137,11 +137,25 @@ func DeleteHostGroup(c *gin.Context) {
 		return
 	}
 	tx := db.Falcon.Begin()
+	//delete hostgroup referance of grp_host table
 	if dt := tx.Where("grp_id = ?", grpID).Delete(&f.GrpHost{}); dt.Error != nil {
 		h.JSONR(c, expecstatus, fmt.Sprintf("delete grp_host got error: %v", dt.Error))
 		dt.Rollback()
 		return
 	}
+	//delete plugins of hostgroup
+	if dt := tx.Where("grp_id = ?", grpID).Delete(&f.Plugin{}); dt.Error != nil {
+		h.JSONR(c, expecstatus, fmt.Sprintf("delete plugins got error: %v", dt.Error))
+		dt.Rollback()
+		return
+	}
+	//delete aggreators of hostgroup
+	if dt := tx.Where("grp_id = ?", grpID).Delete(&f.Cluster{}); dt.Error != nil {
+		h.JSONR(c, expecstatus, fmt.Sprintf("delete aggreators got error: %v", dt.Error))
+		dt.Rollback()
+		return
+	}
+	//finally delete hostgroup
 	if dt := tx.Delete(&f.HostGroup{ID: int64(grpID)}); dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		tx.Rollback()
