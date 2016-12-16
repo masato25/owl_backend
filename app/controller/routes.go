@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/masato25/owl_backend/app/controller/graph"
+	"github.com/masato25/owl_backend/app/controller/host"
 	"github.com/masato25/owl_backend/app/controller/strategy"
 	"github.com/masato25/owl_backend/app/controller/template"
 	"github.com/masato25/owl_backend/app/controller/uic"
@@ -20,5 +21,6 @@ func StartGin(port string, r *gin.Engine) {
 	uic.Routes(r)
 	template.Routes(r)
 	strategy.Routes(r)
+	host.Routes(r)
 	r.Run()
 }

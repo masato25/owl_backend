@@ -1,0 +1,212 @@
+{
+  "ApiSpecs": [
+    {
+      "HttpVerb": "POST",
+      "Path": "/api/v1/hostgroup",
+      "Calls": [
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/hostgroup",
+          "MethodType": "POST",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "Content-Type": " application/json\r",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "{\"name\":\"testhostgroup\"}",
+          "ResponseBody": "{\"id\":343,\"grp_name\":\"testhostgroup\",\"create_user\":\"root\"}",
+          "ResponseCode": 200
+        }
+      ]
+    },
+    {
+      "HttpVerb": "POST",
+      "Path": "/api/v1/hostgroup/host",
+      "Calls": [
+        {
+          "Id": 1,
+          "CurrentPath": "/api/v1/hostgroup/host",
+          "MethodType": "POST",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "Content-Type": " application/json\r",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "{\"hosts\":[\"testhostgroup\",\"agent_test\"],\"hostgroup_id\":342}",
+          "ResponseBody": "{\"error\":\"record not found\"}",
+          "ResponseCode": 417
+        },
+        {
+          "Id": 2,
+          "CurrentPath": "/api/v1/hostgroup/host",
+          "MethodType": "POST",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "Content-Type": " application/json\r",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "{\"hosts\":[\"testhostgroup\",\"agent_test\"],\"hostgroup_id\":343}",
+          "ResponseBody": "{\"message\":\"[9312 9313] bind to hostgroup: 343\"}",
+          "ResponseCode": 200
+        }
+      ]
+    },
+    {
+      "HttpVerb": "PUT",
+      "Path": "/api/v1/hostgroup/host",
+      "Calls": [
+        {
+          "Id": 3,
+          "CurrentPath": "/api/v1/hostgroup/host",
+          "MethodType": "PUT",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "Content-Type": " application/json\r",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "{\"hostgroup_id\":343,\"host_id\":9312}",
+          "ResponseBody": "{\"message\":\"unbind host:9312 of hostgroup: 343\"}",
+          "ResponseCode": 200
+        }
+      ]
+    },
+    {
+      "HttpVerb": "GET",
+      "Path": "/api/v1/hostgroup/343",
+      "Calls": [
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/hostgroup/343",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "",
+          "ResponseBody": "{\"hostgroup\":{\"id\":343,\"grp_name\":\"testhostgroup\",\"create_user\":\"root\"},\"hosts\":[{\"id\":9313,\"hostname\":\"agent_test\",\"ip\":\"\",\"agent_version\":\"\",\"plugin_version\":\"\",\"maintain_begin\":0,\"maintain_end\":0}]}",
+          "ResponseCode": 200
+        }
+      ]
+    },
+    {
+      "HttpVerb": "GET",
+      "Path": "/api/v1/hostgroup",
+      "Calls": [
+        {
+          "Id": 1,
+          "CurrentPath": "/api/v1/hostgroup",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "",
+          "ResponseBody": "[{\"id\":3,\"grp_name\":\"hostnameA\",\"create_user\":\"UserA\"},{\"id\":5,\"grp_name\":\"TAI\",\"create_user\":\"UserB\"},{\"id\":8,\"grp_name\":\"ForTestHostG\",\"create_user\":\"root\"}]",
+          "ResponseCode": 200
+        }
+      ]
+    },
+    {
+      "HttpVerb": "DELETE",
+      "Path": "/api/v1/hostgroup/343",
+      "Calls": [
+        {
+          "Id": 2,
+          "CurrentPath": "/api/v1/hostgroup/343",
+          "MethodType": "DELETE",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "",
+          "ResponseBody": "{\"message\":\"hostgroup:343 has been deleted\"}",
+          "ResponseCode": 200
+        }
+      ]
+    }
+  ]
+}

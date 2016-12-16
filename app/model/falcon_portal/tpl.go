@@ -1,8 +1,8 @@
 package falcon_portal
 
 import (
+	"github.com/masato25/owl_backend/app/model/uic"
 	con "github.com/masato25/owl_backend/config"
-	"github.com/masato25/owl_backend_test/app/model/uic"
 )
 
 type Template struct {
