@@ -5,10 +5,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/masato25/owl_backend/app/controller"
 	"github.com/masato25/owl_backend/config"
+	"github.com/masato25/owl_backend/graph"
 	yaag_gin "github.com/masato25/yaag/gin"
 	"github.com/masato25/yaag/yaag"
 	"github.com/spf13/viper"
 )
+
+func initGraph() {
+	graph.Start(viper.GetStringMapString("graphs.cluster"))
+}
 
 func main() {
 	viper.AddConfigPath(".")
@@ -29,5 +34,7 @@ func main() {
 		})
 		routes.Use(yaag_gin.Document())
 	}
+	initGraph()
+	//start gin server
 	controller.StartGin(viper.GetString("web_port"), routes)
 }
