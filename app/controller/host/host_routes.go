@@ -15,12 +15,25 @@ const expecstatus = http.StatusExpectationFailed
 
 func Routes(r *gin.Engine) {
 	db = config.Con()
-	hostr := r.Group("/api/v1/hostgroup")
+	hostr := r.Group("/api/v1")
 	hostr.Use(utils.AuthSessionMidd)
-	hostr.GET("", GetHostGroups)
-	hostr.POST("", CrateHostGroup)
-	hostr.POST("/host", BindHostToHostGroup)
-	hostr.PUT("/host", UnBindAHostToHostGroup)
-	hostr.GET("/:host_group", GetHostGroup)
-	hostr.DELETE("/:host_group", DeleteHostGroup)
+	//hostgroup
+	hostr.GET("/hostgroup", GetHostGroups)
+	hostr.POST("/hostgroup", CrateHostGroup)
+	hostr.POST("/hostgroup/host", BindHostToHostGroup)
+	hostr.PUT("/hostgroup/host", UnBindAHostToHostGroup)
+	hostr.GET("/hostgroup/:host_group", GetHostGroup)
+	hostr.DELETE("/hostgroup/:host_group", DeleteHostGroup)
+
+	//plugins
+	hostr.GET("/hostgroup/:host_group/plugins", GetPluginOfGrp)
+	hostr.POST("/plugin", CreatePlugin)
+	hostr.DELETE("/plugin/:id", DeletePlugin)
+
+	//aggreator
+	hostr.GET("/hostgroup/:host_group/aggregators", GetAggregatorListOfGrp)
+	hostr.GET("/aggregator/:id", GetAggregator)
+	hostr.POST("/aggregator", CreateAggregator)
+	hostr.PUT("/aggregator", UpdateAggregator)
+	hostr.DELETE("/aggregator/:id", DeleteAggregator)
 }

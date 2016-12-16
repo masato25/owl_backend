@@ -102,3 +102,11 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 ### HostGroup
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/hostgroup.html)
+
+### Plugin
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/plugin.html)
+
+### Aggreator
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/aggreator.html)
