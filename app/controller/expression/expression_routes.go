@@ -20,4 +20,6 @@ func Routes(r *gin.Engine) {
 	expr.GET("", GetExpressionList)
 	expr.GET("/:eid", GetExpression)
 	expr.POST("", CreateExrpession)
+	expr.PUT("", UpdateExrpession)
+	expr.DELETE("/:eid", DeleteExpression)
 }

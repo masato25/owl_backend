@@ -2,6 +2,7 @@ package expression
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -23,7 +24,7 @@ func GetExpressionList(c *gin.Context) {
 }
 
 func GetExpression(c *gin.Context) {
-	eidtmp := c.DefaultQuery("eid", "")
+	eidtmp := c.Params.ByName("eid")
 	if eidtmp == "" {
 		h.JSONR(c, badstatus, "eid is missing")
 		return
@@ -33,24 +34,21 @@ func GetExpression(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
-	expressions := f.Expression{ID: int64(eid)}
-	dt := db.Falcon.Find(&expressions)
-	if dt.Error != nil {
+	expression := f.Expression{ID: int64(eid)}
+	if dt := db.Falcon.Find(&expression); dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
-	h.JSONR(c, expressions)
+	action := f.Action{ID: expression.ID}
+	if dt := db.Falcon.Find(&action); dt.Error != nil {
+		h.JSONR(c, badstatus, fmt.Sprintf("find action got error: %v", dt.Error.Error()))
+		return
+	}
+	h.JSONR(c, map[string]interface{}{
+		"expression": expression,
+		"action":     action,
+	})
 	return
-}
-
-type ActionTmp struct {
-	UIC                []string `json:"uic" binding:"required"`
-	URL                string   `json:"url" binding:"exists"`
-	Callback           int      `json:"callback" binding:"required"`
-	BeforeCallbackSMS  int      `json:"before_callback_sms" binding:"exists"`
-	AfterCallbackSMS   int      `json:"after_callback_sms" binding:"exists"`
-	BeforeCallbackMail int      `json:"before_callback_mail" binding:"exists"`
-	AfterCallbackMail  int      `json:"after_callback_mail" binding:"exists"`
 }
 
 type APICreateExrpessionInput struct {
@@ -62,8 +60,18 @@ type APICreateExrpessionInput struct {
 	Priority   int       `json:"priority" binding:"required"`
 	Note       string    `json:"note" binding:"exists"`
 	Pause      int       `json:"pause" binding:"exists"`
-	Action     ActionTmp `json:"pause" binding:"required"`
+	Action     ActionTmp `json:"action" binding:"required"`
 	// ActionId   string `json:"action_id" binding:"exists"`
+}
+
+type ActionTmp struct {
+	UIC                []string `json:"uic" binding:"required"`
+	URL                string   `json:"url" binding:"exists"`
+	Callback           int      `json:"callback" binding:"exists"`
+	BeforeCallbackSMS  int      `json:"before_callback_sms" binding:"exists"`
+	AfterCallbackSMS   int      `json:"after_callback_sms" binding:"exists"`
+	BeforeCallbackMail int      `json:"before_callback_mail" binding:"exists"`
+	AfterCallbackMail  int      `json:"after_callback_mail" binding:"exists"`
 }
 
 func (this APICreateExrpessionInput) CheckFormat() (err error) {
@@ -122,23 +130,13 @@ func CreateExrpession(c *gin.Context) {
 		tx.Rollback()
 		return
 	}
+	tx.Commit()
 	h.JSONR(c, "expression created")
 	return
 }
 
-type ActionTmpU struct {
-	ID                 int64    `json:"id" binding:"required"`
-	UIC                []string `json:"uic" binding:"required"`
-	URL                string   `json:"url" binding:"exists"`
-	Callback           int      `json:"callback" binding:"required"`
-	BeforeCallbackSMS  int      `json:"before_callback_sms" binding:"exists"`
-	AfterCallbackSMS   int      `json:"after_callback_sms" binding:"exists"`
-	BeforeCallbackMail int      `json:"before_callback_mail" binding:"exists"`
-	AfterCallbackMail  int      `json:"after_callback_mail" binding:"exists"`
-}
-
 type APIUpdateExrpessionInput struct {
-	ID         string     `json:"id"  binding:"required"`
+	ID         int64      `json:"id"  binding:"required"`
 	Expression string     `json:"expression" binding:"required"`
 	Func       string     `json:"func" binding:"required"`
 	Op         string     `json:"op" binding:"required"`
@@ -147,7 +145,17 @@ type APIUpdateExrpessionInput struct {
 	Priority   int        `json:"priority" binding:"required"`
 	Note       string     `json:"note" binding:"exists"`
 	Pause      int        `json:"pause" binding:"exists"`
-	Action     ActionTmpU `json:"pause" binding:"required"`
+	Action     ActionTmpU `json:"action" binding:"required"`
+}
+
+type ActionTmpU struct {
+	UIC                []string `json:"uic" binding:"required"`
+	URL                string   `json:"url" binding:"exists"`
+	Callback           int      `json:"callback" binding:"exists"`
+	BeforeCallbackSMS  int      `json:"before_callback_sms" binding:"exists"`
+	AfterCallbackSMS   int      `json:"after_callback_sms" binding:"exists"`
+	BeforeCallbackMail int      `json:"before_callback_mail" binding:"exists"`
+	AfterCallbackMail  int      `json:"after_callback_mail" binding:"exists"`
 }
 
 func (this APIUpdateExrpessionInput) CheckFormat() (err error) {
@@ -172,8 +180,23 @@ func UpdateExrpession(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
+	tx := db.Falcon.Begin()
 	user, _ := h.GetUser(c)
-	expression := f.Expression{
+	expression := f.Expression{ID: inputs.ID}
+	if dt := tx.Find(&expression); dt.Error != nil {
+		h.JSONR(c, expecstatus, fmt.Sprintf(
+			"find expression got error:%v", dt.Error.Error()))
+		tx.Rollback()
+		return
+	}
+	if !user.IsAdmin() {
+		if expression.CreateUser != user.Name {
+			h.JSONR(c, badstatus, "You don't have permission!")
+			tx.Rollback()
+			return
+		}
+	}
+	dt := tx.Table("expression").Where("id = ?", expression.ID).UpdateColumns(&f.Expression{
 		Expression: inputs.Expression,
 		Func:       inputs.Func,
 		Op:         inputs.Op,
@@ -182,13 +205,73 @@ func UpdateExrpession(c *gin.Context) {
 		Priority:   inputs.Priority,
 		Note:       inputs.Note,
 		Pause:      inputs.Pause,
-		CreateUser: user.Name,
-	}
-	dt := db.Falcon.Where("id = ?", inputs.ID).Update(&expression)
+	})
 	if dt.Error != nil {
-		h.JSONR(c, expecstatus, dt.Error)
+		h.JSONR(c, expecstatus, fmt.Sprintf(
+			"update expression got error: %v", dt.Error))
+		tx.Rollback()
 		return
 	}
-	h.JSONR(c, "expression updated")
+	var actionTmp f.Action
+	if dt = tx.Find(&actionTmp, expression.ActionId); dt.Error != nil {
+		h.JSONR(c, expecstatus, fmt.Sprintf(
+			"find action got error: %v", dt.Error))
+		tx.Rollback()
+		return
+	}
+	dt = tx.Table("action").Where("id = ?", actionTmp.ID).UpdateColumns(&f.Action{
+		UIC:                strings.Join(inputs.Action.UIC, ","),
+		URL:                inputs.Action.URL,
+		Callback:           inputs.Action.Callback,
+		BeforeCallbackSMS:  inputs.Action.BeforeCallbackSMS,
+		BeforeCallbackMail: inputs.Action.BeforeCallbackMail,
+		AfterCallbackSMS:   inputs.Action.AfterCallbackSMS,
+		AfterCallbackMail:  inputs.Action.AfterCallbackMail,
+	})
+	if dt.Error != nil {
+		h.JSONR(c, expecstatus, dt.Error)
+		tx.Rollback()
+		return
+	}
+	tx.Commit()
+	h.JSONR(c, fmt.Sprintf("expression:%v has been updated", inputs.ID))
+	return
+}
+
+func DeleteExpression(c *gin.Context) {
+	eidtmp := c.Params.ByName("eid")
+	if eidtmp == "" {
+		h.JSONR(c, badstatus, "eid is missing")
+		return
+	}
+	eid, err := strconv.Atoi(eidtmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	}
+	tx := db.Falcon.Begin()
+	user, _ := h.GetUser(c)
+	expression := f.Expression{ID: int64(eid)}
+	if !user.IsAdmin() {
+		tx.Find(&expression)
+		if expression.CreateUser != user.Name {
+			h.JSONR(c, badstatus, "You don't have permission!")
+			tx.Rollback()
+			return
+		}
+	}
+	dt := tx.Table("action").Where("id = ?", expression.ActionId).Delete(&f.Action{})
+	if dt.Error != nil {
+		h.JSONR(c, badstatus, dt.Error)
+		tx.Rollback()
+		return
+	}
+	if dt := tx.Delete(&expression); dt.Error != nil {
+		h.JSONR(c, badstatus, dt.Error)
+		tx.Rollback()
+		return
+	}
+	tx.Commit()
+	h.JSONR(c, fmt.Sprintf("expression:%d has been deleted", eid))
 	return
 }
