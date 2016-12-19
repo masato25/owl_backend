@@ -31,6 +31,7 @@ func InitDB(loggerlevel bool) (err error) {
 	var p *sql.DB
 	portal, err := gorm.Open("mysql", viper.GetString("db.faclon_portal"))
 	portal.Dialect().SetDB(p)
+	portal.LogMode(loggerlevel)
 	if err != nil {
 		return
 	}
@@ -40,6 +41,7 @@ func InitDB(loggerlevel bool) (err error) {
 	var g *sql.DB
 	graphd, err := gorm.Open("mysql", viper.GetString("db.graph"))
 	graphd.Dialect().SetDB(g)
+	graphd.LogMode(loggerlevel)
 	if err != nil {
 		return
 	}
@@ -49,6 +51,7 @@ func InitDB(loggerlevel bool) (err error) {
 	var u *sql.DB
 	uicd, err := gorm.Open("mysql", viper.GetString("db.uic"))
 	uicd.Dialect().SetDB(u)
+	uicd.LogMode(loggerlevel)
 	if err != nil {
 		return
 	}
