@@ -6,11 +6,24 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
 	f "github.com/masato25/owl_backend/app/model/falcon_portal"
 )
 
 func GetAggregatorListOfGrp(c *gin.Context) {
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	grpIDtmp := c.Params.ByName("host_group")
 	if grpIDtmp == "" {
 		h.JSONR(c, badstatus, "grp id is missing")
@@ -23,7 +36,13 @@ func GetAggregatorListOfGrp(c *gin.Context) {
 		return
 	}
 	aggregators := []f.Cluster{}
-	if dt := db.Falcon.Where("grp_id = ?", grpID).Find(&aggregators); dt.Error != nil {
+	var dt *gorm.DB
+	if limit != -1 && page != -1 {
+		dt = db.Falcon.Raw(fmt.Sprintf("SELECT * from cluster WHERE grp_id = %d limit %d,%d", grpID, page, limit)).Scan(&aggregators)
+	} else {
+		dt = db.Falcon.Where("grp_id = ?", grpID).Find(&aggregators)
+	}
+	if dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}

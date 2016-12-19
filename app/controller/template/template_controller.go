@@ -6,14 +6,33 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
 	f "github.com/masato25/owl_backend/app/model/falcon_portal"
 )
 
 func GetTemplates(c *gin.Context) {
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
+	var dt *gorm.DB
 	var templates []f.Template
 	q := c.DefaultQuery("q", ".+")
-	dt := db.Falcon.Where("tpl_name regexp ?", q).Find(&templates)
+	if limit != -1 && page != -1 {
+		dt = db.Falcon.Raw(
+			fmt.Sprintf("SELECT * from tpl WHERE tpl_name regexp %s limit %d,%d", q, page, limit)).Scan(&templates)
+	} else {
+		dt = db.Falcon.Where("tpl_name regexp ?", q).Find(&templates)
+	}
 	if dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return

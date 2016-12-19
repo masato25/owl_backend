@@ -17,18 +17,36 @@ import (
 
 //support root as admin
 func Teams(c *gin.Context) {
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	query := c.DefaultQuery("q", ".+")
 	user, err := h.GetUser(c)
 	if err != nil {
-		h.JSONR(c, 400, err)
+		h.JSONR(c, badstatus, err)
 		return
 	}
+	var dt *gorm.DB
 	teams := []uic.Team{}
 	if user.IsAdmin() {
-		dt := db.Uic.Table("team").Where("name regexp ?", query).Scan(&teams)
+		if limit != -1 && page != -1 {
+			dt = db.Uic.Table("team").Raw(
+				fmt.Sprintf("select * from team where name regexp '%s' limit %d,%d", query, page, limit)).Scan(&teams)
+		} else {
+			dt = db.Uic.Table("team").Where("name regexp ?", query).Scan(&teams)
+		}
 		err = dt.Error
 	} else {
-		dt := db.Uic.Table("team").Where("name regexp ? AND creator = ?", query, user.ID).Scan(&teams)
+		dt = db.Uic.Table("team").Where("name regexp ? AND creator = ?", query, user.ID).Scan(&teams)
 		err = dt.Error
 	}
 	if err != nil {

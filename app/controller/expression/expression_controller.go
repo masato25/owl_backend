@@ -8,13 +8,31 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
 	f "github.com/masato25/owl_backend/app/model/falcon_portal"
 )
 
 func GetExpressionList(c *gin.Context) {
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
+	var dt *gorm.DB
 	expressions := []f.Expression{}
-	dt := db.Falcon.Find(&expressions)
+	if limit != -1 && page != -1 {
+		dt = db.Falcon.Raw(fmt.Sprintf("SELECT * from expression limit %d,%d", page, limit)).Scan(&expressions)
+	} else {
+		dt = db.Falcon.Find(&expressions)
+	}
 	if dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return

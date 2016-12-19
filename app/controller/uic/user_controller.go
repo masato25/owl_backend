@@ -7,6 +7,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
 	"github.com/masato25/owl_backend/app/model/uic"
 	"github.com/masato25/owl_backend/app/utils"
@@ -239,9 +240,27 @@ func UserList(c *gin.Context) {
 	// 	h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
 	// 	return
 	// }
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	q := c.DefaultQuery("q", ".+")
 	var user []uic.User
-	dt := db.Uic.Table("user").Where("name regexp ?", q).Scan(&user)
+	var dt *gorm.DB
+	if limit != -1 && page != -1 {
+		dt = db.Uic.Raw(
+			fmt.Sprintf("select * from user where name regexp '%s' limit %d,%d", q, page, limit)).Scan(&user)
+	} else {
+		dt = db.Uic.Table("user").Where("name regexp ?", q).Scan(&user)
+	}
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return

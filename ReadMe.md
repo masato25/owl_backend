@@ -118,5 +118,4 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 
 ### NoData
 
-
 ### Screen

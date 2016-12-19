@@ -175,6 +175,33 @@
           "RequestBody": "",
           "ResponseBody": "[{\"id\":3,\"grp_name\":\"hostnameA\",\"create_user\":\"UserA\"},{\"id\":5,\"grp_name\":\"TAI\",\"create_user\":\"UserB\"},{\"id\":8,\"grp_name\":\"ForTestHostG\",\"create_user\":\"root\"}]",
           "ResponseCode": 200
+        },
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/hostgroup",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {
+            "limit": "10",
+            "page": "1"
+          },
+          "RequestBody": "",
+          "ResponseBody": "[{\"id\":3,\"grp_name\":\"docker-A\",\"create_user\":\"user-A\"},{\"id\":5,\"grp_name\":\"docker-T\",\"create_user\":\"cheminlin\"},{\"id\":8,\"grp_name\":\"docker-F\",\"create_user\":\"root\"},{\"id\":9,\"grp_name\":\"docker-B\",\"create_user\":\"root\"},{\"id\":11,\"grp_name\":\"docker-D\",\"create_user\":\"user-C\"},{\"id\":12,\"grp_name\":\"docker-E\",\"create_user\":\"user-C\"},{\"id\":14,\"grp_name\":\"docker-G\",\"create_user\":\"user-C\"},{\"id\":15,\"grp_name\":\"docker-G2\",\"create_user\":\"user-C\"},{\"id\":16,\"grp_name\":\"docker-H\",\"create_user\":\"user-C\"},{\"id\":17,\"grp_name\":\"tools\",\"create_user\":\"user-C\"}]",
+          "ResponseCode": 200
         }
       ]
     },

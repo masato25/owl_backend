@@ -6,13 +6,32 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	h "github.com/masato25/owl_backend/app/helper"
 	f "github.com/masato25/owl_backend/app/model/falcon_portal"
 )
 
 func GetHostGroups(c *gin.Context) {
+	var (
+		limit int
+		page  int
+		err   error
+	)
+	pageTmp := c.DefaultQuery("page", "")
+	limitTmp := c.DefaultQuery("limit", "")
+	page, limit, err = h.PageParser(pageTmp, limitTmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	var hostgroups []f.HostGroup
-	if dt := db.Falcon.Table("grp").Limit(3).Scan(&hostgroups); dt.Error != nil {
+	var dt *gorm.DB
+	if limit != -1 && page != -1 {
+		dt = db.Falcon.Raw(fmt.Sprintf("SELECT * from grp limit %d,%d", page, limit)).Scan(&hostgroups)
+	} else {
+		dt = db.Falcon.Table("grp").Find(&hostgroups)
+	}
+	if dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}
