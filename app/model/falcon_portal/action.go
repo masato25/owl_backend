@@ -11,10 +11,10 @@ package falcon_portal
 // | after_callback_mail  | tinyint(4)       | NO   |     | 0  		  |								 |
 ////////////////////////////////////////////////////////////////////////////////////
 type Action struct {
-	ID                 uint   `json:"id" gorm:"column:id"`
+	ID                 int64  `json:"id" gorm:"column:id"`
 	UIC                string `json:"uic" gorm:"column:uic"`
 	URL                string `json:"url" gorm:"column:url"`
-	Callback           string `json:"callback" orm:"column:callback"`
+	Callback           int    `json:"callback" orm:"column:callback"`
 	BeforeCallbackSMS  int    `json:"before_callback_sms" orm:"column:before_callback_sms"`
 	BeforeCallbackMail int    `json:"before_callback_mail" orm:"column:before_callback_mail"`
 	AfterCallbackSMS   int    `json:"after_callback_sms" orm:"column:after_callback_sms"`

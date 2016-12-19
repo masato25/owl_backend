@@ -176,7 +176,7 @@ func DeleteTemplate(c *gin.Context) {
 type APICreateActionToTmplateInput struct {
 	UIC                string `json:"uic" binding:"exists"`
 	URL                string `json:"url" binding:"exists"`
-	Callback           string `json:"callback" binding:"required"`
+	Callback           int    `json:"callback" binding:"exists"`
 	BeforeCallbackSMS  int    `json:"before_callback_sms" binding:"exists"`
 	AfterCallbackSMS   int    `json:"after_callback_sms" binding:"exists"`
 	BeforeCallbackMail int    `json:"before_callback_mail" binding:"exists"`
@@ -232,7 +232,7 @@ type APIUpdateActionToTmplateInput struct {
 	ID                 int64  `json:"id" validate:"required"`
 	UIC                string `json:"uic" binding:"exists"`
 	URL                string `json:"url" binding:"exists"`
-	Callback           string `json:"callback" binding:"required"`
+	Callback           int    `json:"callback" binding:"exists"`
 	BeforeCallbackSMS  int    `json:"before_callback_sms" binding:"exists"`
 	AfterCallbackSMS   int    `json:"after_callback_sms" binding:"exists"`
 	BeforeCallbackMail int    `json:"before_callback_mail" binding:"exists"`

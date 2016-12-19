@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/masato25/owl_backend/app/controller/expression"
 	"github.com/masato25/owl_backend/app/controller/graph"
 	"github.com/masato25/owl_backend/app/controller/host"
 	"github.com/masato25/owl_backend/app/controller/strategy"
@@ -22,5 +23,6 @@ func StartGin(port string, r *gin.Engine) {
 	template.Routes(r)
 	strategy.Routes(r)
 	host.Routes(r)
+	expression.Routes(r)
 	r.Run()
 }

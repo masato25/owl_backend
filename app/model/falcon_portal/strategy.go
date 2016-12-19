@@ -19,7 +19,7 @@ package falcon_portal
 ////////////////////////////////////////////////////////////////////////////
 
 type Strategy struct {
-	ID         uint   `json:"id" gorm:"column:id"`
+	ID         int64  `json:"id" gorm:"column:id"`
 	Metric     string `json:"metric" gorm:"column:metric"`
 	Tags       string `json:"tags" gorm:"column:tags"`
 	MaxStep    int    `json:"max_step" gorm:"column:max_step"`
@@ -36,3 +36,6 @@ type Strategy struct {
 func (this Strategy) TableName() string {
 	return "strategy"
 }
+
+//pending
+//tags table for set variable for tags of strategy
