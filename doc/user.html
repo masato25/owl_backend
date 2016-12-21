@@ -112,6 +112,8 @@
             
                 <li role="presentation"><a href="#6top" role="tab" data-toggle="tab">GET : /api/v1/user/auth_session</a></li>
             
+                <li role="presentation"><a href="#7top" role="tab" data-toggle="tab">GET : /api/v1/user/current</a></li>
+            
         <ul>
     </div>
     <div class="col-md-8 tab-content">
@@ -926,6 +928,99 @@
                         try {
                             var jsonStr = spaceJson("{\"error\":\"not found this user\"}");
                             document.getElementById('response-body-6-1').innerHTML = syntaxHighlight(jsonStr);
+                        } catch (e) {
+                             
+                        }
+                    }
+                </script>
+                
+                <hr>
+            
+        </div>
+        
+        <div id="7top"  role="tabpanel" class="tab-pane col-md-10">
+            
+                
+                <p> <H4> Request Headers </H4> </p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Apitoken</td>
+                        <td> {&#34;name&#34;:&#34;root&#34;,&#34;sig&#34;:&#34;427d6803b78311e68afd0242ac130006&#34;}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>X-Forwarded-For</td>
+                        <td>  127.0.0.1</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                
+                
+                <p><h4> Response Code</h4></p>
+                <pre class="prettyprint lang-json">200</pre>
+                
+                <p><h4> Response Headers</h4></p>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Allow-Credentials</td>
+                        <td> true</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Allow-Headers</td>
+                        <td> Content-Type, Content-Length, Apitoken</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Allow-Methods</td>
+                        <td> POST, GET, OPTIONS, PUT, DELETE, UPDATE</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Allow-Origin</td>
+                        <td> *</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Expose-Headers</td>
+                        <td> Content-Length</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Access-Control-Max-Age</td>
+                        <td> 86400</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Content-Type</td>
+                        <td> application/json; charset=utf-8</td>
+                    </tr>
+                    
+                </table>
+                
+                
+                <p> <H4> Response Body </H4> </p>
+                <pre class="prettyprint" id="response-body-7-0">{&#34;id&#34;:2,&#34;name&#34;:&#34;root&#34;,&#34;cnname&#34;:&#34;&#34;,&#34;email&#34;:&#34;&#34;,&#34;phone&#34;:&#34;&#34;,&#34;im&#34;:&#34;&#34;,&#34;qq&#34;:&#34;&#34;,&#34;role&#34;:2}</pre>
+                <script>
+                     
+                    var responseHeader ={"Access-Control-Allow-Credentials":"true","Access-Control-Allow-Headers":"Content-Type, Content-Length, Apitoken","Access-Control-Allow-Methods":"POST, GET, OPTIONS, PUT, DELETE, UPDATE","Access-Control-Allow-Origin":"*","Access-Control-Expose-Headers":"Content-Length","Access-Control-Max-Age":"86400","Content-Type":"application/json; charset=utf-8"};
+
+                    if (responseHeader["Content-Type"] === "application/json"){
+                        try {
+                            var jsonStr = spaceJson("{\"id\":2,\"name\":\"root\",\"cnname\":\"\",\"email\":\"\",\"phone\":\"\",\"im\":\"\",\"qq\":\"\",\"role\":2}");
+                            document.getElementById('response-body-7-0').innerHTML = syntaxHighlight(jsonStr);
                         } catch (e) {
                              
                         }
