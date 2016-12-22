@@ -36,6 +36,3 @@ type Strategy struct {
 func (this Strategy) TableName() string {
 	return "strategy"
 }
-
-//pending
-//tags table for set variable for tags of strategy

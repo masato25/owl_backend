@@ -277,6 +277,66 @@
           "ResponseCode": 200
         }
       ]
+    },
+    {
+      "HttpVerb": "GET",
+      "Path": "/api/v1/user/u/3",
+      "Calls": [
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/user/u/3",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "",
+          "ResponseBody": "{\"error\":\"record not found\"}",
+          "ResponseCode": 417
+        }
+      ]
+    },
+    {
+      "HttpVerb": "GET",
+      "Path": "/api/v1/user/u/4",
+      "Calls": [
+        {
+          "Id": 1,
+          "CurrentPath": "/api/v1/user/u/4",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {},
+          "RequestBody": "",
+          "ResponseBody": "{\"id\":4,\"name\":\"userA\",\"cnname\":\"tear\",\"email\":\"\",\"phone\":\"\",\"im\":\"\",\"qq\":\"\",\"role\":0}",
+          "ResponseCode": 200
+        }
+      ]
     }
   ]
 }

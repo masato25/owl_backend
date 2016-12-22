@@ -3,6 +3,7 @@ package uic
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -160,6 +161,31 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	h.JSONR(c, http.StatusOK, user)
+	return
+}
+
+func GetUser(c *gin.Context) {
+	uidtmp := c.Params.ByName("uid")
+	if uidtmp == "" {
+		h.JSONR(c, badstatus, "user id is missing")
+		return
+	}
+	uid, err := strconv.Atoi(uidtmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	}
+	user, err := h.GetUser(c)
+	if !user.IsAdmin() {
+		h.JSONR(c, badstatus, "only admin user can do this.")
+		return
+	}
+	fuser := uic.User{ID: int64(uid)}
+	if dt := db.Uic.Find(&fuser); dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+	h.JSONR(c, fuser)
 	return
 }
 

@@ -7,6 +7,7 @@ import (
 	"github.com/masato25/owl_backend/app/controller/expression"
 	"github.com/masato25/owl_backend/app/controller/graph"
 	"github.com/masato25/owl_backend/app/controller/host"
+	"github.com/masato25/owl_backend/app/controller/mockcfg"
 	"github.com/masato25/owl_backend/app/controller/strategy"
 	"github.com/masato25/owl_backend/app/controller/template"
 	"github.com/masato25/owl_backend/app/controller/uic"
@@ -24,5 +25,6 @@ func StartGin(port string, r *gin.Engine) {
 	strategy.Routes(r)
 	host.Routes(r)
 	expression.Routes(r)
+	mockcfg.Routes(r)
 	r.Run()
 }
