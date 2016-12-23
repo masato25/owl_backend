@@ -9,9 +9,10 @@ import (
 )
 
 type DBPool struct {
-	Falcon *gorm.DB
-	Graph  *gorm.DB
-	Uic    *gorm.DB
+	Falcon    *gorm.DB
+	Graph     *gorm.DB
+	Uic       *gorm.DB
+	Dashboard *gorm.DB
 }
 
 var (
@@ -57,6 +58,16 @@ func InitDB(loggerlevel bool) (err error) {
 	}
 	uicd.SingularTable(true)
 	dbp.Uic = uicd
+
+	var d *sql.DB
+	dashd, err := gorm.Open("mysql", viper.GetString("db.dashboard"))
+	dashd.Dialect().SetDB(d)
+	dashd.LogMode(loggerlevel)
+	if err != nil {
+		return
+	}
+	dashd.SingularTable(true)
+	dbp.Dashboard = dashd
 
 	SetLogLevel(loggerlevel)
 	return
