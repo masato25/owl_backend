@@ -22,6 +22,14 @@ func UniqSet(list []interface{}) []interface{} {
 	return keys
 }
 
+func MapTake(list []interface{}, limit int) []interface{} {
+	res := make([]interface{}, limit)
+	for i := 0; i < limit; i++ {
+		res[i] = list[i]
+	}
+	return res
+}
+
 func ConverIntStringToList(eid string) (result string) {
 	for i, e := range strings.Split(eid, ",") {
 		v, err := strconv.Atoi(e)

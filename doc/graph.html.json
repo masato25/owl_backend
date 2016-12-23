@@ -58,6 +58,33 @@
           "RequestBody": "",
           "ResponseBody": "[{\"endpoint\":\"docker-agent\",\"id\":7},{\"endpoint\":\"docker-task\",\"id\":6},{\"endpoint\":\"graph\",\"id\":3},{\"endpoint\":\"nodata\",\"id\":920},{\"endpoint\":\"task\",\"id\":5}]",
           "ResponseCode": 200
+        },
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/graph/endpoint",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {
+            "limit": "10",
+            "q": ".+"
+          },
+          "RequestBody": "",
+          "ResponseBody": "[{\"endpoint\":\"docker-a\",\"id\":244525914},{\"endpoint\":\"docker-b\",\"id\":12675145},{\"endpoint\":\"docker-c\",\"id\":12683936},{\"endpoint\":\"docker-d\",\"id\":12681439},{\"endpoint\":\"docker-f\",\"id\":12676363},{\"endpoint\":\"docker-g\",\"id\":12681715},{\"endpoint\":\"docker-h\",\"id\":12678421},{\"endpoint\":\"docker-i\",\"id\":12676879},{\"endpoint\":\"docker-j\",\"id\":12675447},{\"endpoint\":\"docker-k\",\"id\":12679349}]",
+          "ResponseCode": 200
         }
       ]
     },
@@ -102,6 +129,34 @@
           },
           "RequestBody": "",
           "ResponseBody": "[\"disk.io.avgqu-sz/device=sda\",\"disk.io.ios_in_progress/device=sda\",\"disk.io.msec_read/device=sda\",\"disk.io.read_requests/device=sda\",\"disk.io.read_sectors/device=sda\",\"disk.io.write_bytes/device=sda\",\"disk.io.write_merged/device=sda\",\"disk.io.msec_write/device=sda\",\"disk.io.read_merged/device=sda\",\"disk.io.svctm/device=sda\",\"disk.io.util/device=sda\",\"disk.io.avgrq_sz/device=sda\",\"disk.io.msec_weighted_total/device=sda\",\"disk.io.await/device=sda\",\"disk.io.msec_total/device=sda\",\"disk.io.read_bytes/device=sda\",\"disk.io.write_requests/device=sda\",\"disk.io.write_sectors/device=sda\"]",
+          "ResponseCode": 200
+        },
+        {
+          "Id": 2,
+          "CurrentPath": "/api/v1/graph/endpoint_counter",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
+            "X-Forwarded-For": " 127.0.0.1\r"
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {
+            "eid": "244525914,12675145,12683936,12681439,12676363,12681715,12678421,12676879,12675447,12679349",
+            "limit": "3",
+            "metricQuery": "disk.+"
+          },
+          "RequestBody": "",
+          "ResponseBody": "[\"disk.io.write_sectors/device=sdh\",\"disk.device.size/device=sdm\",\"disk.io.ios_in_progress/device=sdj\"]",
           "ResponseCode": 200
         }
       ]

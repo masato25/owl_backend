@@ -2,6 +2,7 @@ package graph
 
 import (
 	"fmt"
+	"strconv"
 
 	"net/http"
 
@@ -16,11 +17,17 @@ import (
 
 func EndpointRegexpQuery(c *gin.Context) {
 	q := c.DefaultQuery("q", "")
+	limitTmp := c.DefaultQuery("limit", "500")
+	limit, err := strconv.Atoi(limitTmp)
+	if err != nil {
+		h.JSONR(c, http.StatusBadRequest, err)
+		return
+	}
 	if q == "" {
 		h.JSONR(c, http.StatusBadRequest, "q is missing")
 	} else {
 		var endpoint []m.Endpoint
-		db.Graph.Table("endpoint").Select("endpoint, id").Where("endpoint regexp ?", q).Scan(&endpoint)
+		db.Graph.Table("endpoint").Select("endpoint, id").Where("endpoint regexp ?", q).Limit(limit).Scan(&endpoint)
 		endpoints := []map[string]interface{}{}
 		for _, e := range endpoint {
 			endpoints = append(endpoints, map[string]interface{}{"id": e.ID, "endpoint": e.Endpoint})
@@ -33,6 +40,12 @@ func EndpointRegexpQuery(c *gin.Context) {
 func EndpointCounterRegexpQuery(c *gin.Context) {
 	eid := c.DefaultQuery("eid", "")
 	metricQuery := c.DefaultQuery("metricQuery", ".+")
+	limitTmp := c.DefaultQuery("limit", "500")
+	limit, err := strconv.Atoi(limitTmp)
+	if err != nil {
+		h.JSONR(c, http.StatusBadRequest, err)
+		return
+	}
 	if eid == "" {
 		h.JSONR(c, http.StatusBadRequest, "eid is missing")
 	} else {
@@ -49,7 +62,9 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 		for _, c := range counters {
 			countersResp = append(countersResp, c.Counter)
 		}
-		h.JSONR(c, utils.UniqSet(countersResp))
+		result := utils.UniqSet(countersResp)
+		result = utils.MapTake(result, limit)
+		h.JSONR(c, result)
 	}
 	return
 }
