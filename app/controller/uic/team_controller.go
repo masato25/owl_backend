@@ -15,6 +15,11 @@ import (
 	"github.com/masato25/owl_backend/config"
 )
 
+type CTeam struct {
+	Team   uic.Team
+	Useres []uic.User
+}
+
 //support root as admin
 func Teams(c *gin.Context) {
 	var (
@@ -53,7 +58,18 @@ func Teams(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
-	h.JSONR(c, teams)
+	var outputs []CTeam
+	for _, t := range teams {
+		cteam := CTeam{Team: t}
+		user, err := t.Members()
+		if err != nil {
+			h.JSONR(c, badstatus, err)
+			return
+		}
+		cteam.Useres = user
+		outputs = append(outputs, cteam)
+	}
+	h.JSONR(c, outputs)
 	return
 }
 

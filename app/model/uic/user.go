@@ -9,11 +9,11 @@ type User struct {
 	Name   string `json:"name"`
 	Cnname string `json:"cnname"`
 	Passwd string `json:"-"`
-	Email  string `json:"email"`
-	Phone  string `json:"phone"`
-	IM     string `json:"im" gorm:"column:im"`
-	QQ     string `json:"qq" gorm:"column:qq"`
-	Role   int    `json:"role"`
+	Email  string `json:"email,omitempty"`
+	Phone  string `json:"phone,omitempty"`
+	IM     string `json:"im,omitempty" gorm:"column:im"`
+	QQ     string `json:"qq,omitempty" gorm:"column:qq"`
+	Role   int    `json:"role,omitempty"`
 }
 
 func (this User) IsAdmin() bool {
@@ -41,13 +41,6 @@ func (this User) FindUser() (user User, err error) {
 	return
 }
 
-type Team struct {
-	ID      int64  `json:"id"`
-	Name    string `json:"name"`
-	Resume  string `json:"resume"`
-	Creator int64  `json:"creator"`
-}
-
 type Session struct {
 	ID      int64
 	Uid     int64
@@ -62,5 +55,3 @@ func (this Session) TableName() string {
 func (this User) TableName() string {
 	return "user"
 }
-
-//db.SingularTable(true)
