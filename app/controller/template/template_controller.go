@@ -68,7 +68,7 @@ func GetTemplatesSimple(c *gin.Context) {
 	var dt *gorm.DB
 	var templates []f.Template
 	q := c.DefaultQuery("q", ".+")
-	dt = db.Falcon.Select("id, tpl_name").Where("tpl_name regexp ?", q).Limit(5).Find(&templates)
+	dt = db.Falcon.Select("id, tpl_name").Where("tpl_name regexp ?", q).Find(&templates)
 	if dt.Error != nil {
 		log.Infof(dt.Error.Error())
 		h.JSONR(c, badstatus, dt.Error)
