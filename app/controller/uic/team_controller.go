@@ -16,8 +16,9 @@ import (
 )
 
 type CTeam struct {
-	Team   uic.Team
-	Useres []uic.User
+	Team        uic.Team
+	TeamCreator string `json:"creator_name"`
+	Useres      []uic.User
 }
 
 //support root as admin
@@ -67,6 +68,11 @@ func Teams(c *gin.Context) {
 			return
 		}
 		cteam.Useres = user
+		creatorName, err := t.GetCreatorName()
+		if err != nil {
+			log.Debug(err.Error())
+		}
+		cteam.TeamCreator = creatorName
 		outputs = append(outputs, cteam)
 	}
 	h.JSONR(c, outputs)
@@ -214,6 +220,10 @@ func DeleteTeam(c *gin.Context) {
 	var err error
 	teamIdStr := c.Params.ByName("team_id")
 	teamIdTmp, err := strconv.Atoi(teamIdStr)
+	if err != nil {
+		h.JSONR(c, badstatus, err.Error())
+		return
+	}
 	teamId := int64(teamIdTmp)
 	if teamId == 0 {
 		h.JSONR(c, badstatus, "team_id is empty")
@@ -242,7 +252,7 @@ func DeleteTeam(c *gin.Context) {
 		} else if dt.Error != nil {
 			err = dt.Error
 		} else {
-			db.Uic.Delete(&uic.Team{ID: team.ID})
+			db.Uic.Where("id = ?", teamId).Delete(&uic.Team{ID: teamId})
 		}
 	}
 	var dt2 *gorm.DB
@@ -250,7 +260,7 @@ func DeleteTeam(c *gin.Context) {
 		h.JSONR(c, http.StatusExpectationFailed, err)
 		return
 	} else {
-		dt2 = db.Uic.Delete(uic.RelTeamUser{Tid: teamId})
+		dt2 = db.Uic.Where("tid = ?", teamId).Delete(uic.RelTeamUser{})
 	}
 	h.JSONR(c, fmt.Sprintf("team %v is deleted. Affect row: %d / refer delete: %d", teamId, dt.RowsAffected, dt2.RowsAffected))
 	return

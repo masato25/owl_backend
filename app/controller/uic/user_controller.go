@@ -104,14 +104,14 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 	uid := user.ID
-	user = uic.User{
-		Cnname: inputs.Cnname,
-		Email:  inputs.Email,
-		Phone:  inputs.Phone,
-		IM:     inputs.IM,
-		QQ:     inputs.QQ,
+	uuser := map[string]interface{}{
+		"Cnname": inputs.Cnname,
+		"Email":  inputs.Email,
+		"Phone":  inputs.Phone,
+		"IM":     inputs.IM,
+		"QQ":     inputs.QQ,
 	}
-	dt := db.Uic.Table("user").Where("id = ?", uid).Update(&user)
+	dt := db.Uic.Model(&user).Where("id = ?", uid).Save(&uuser)
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
@@ -141,6 +141,9 @@ func ChangePassword(c *gin.Context) {
 		return
 	case user.Passwd != utils.HashIt(inputs.OldPassword):
 		h.JSONR(c, http.StatusBadRequest, "oldPassword is not match current one")
+		return
+	case user.Passwd != "":
+		h.JSONR(c, http.StatusBadRequest, "Password can not be blank")
 		return
 	}
 

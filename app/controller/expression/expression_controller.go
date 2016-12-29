@@ -214,38 +214,42 @@ func UpdateExrpession(c *gin.Context) {
 			return
 		}
 	}
-	dt := tx.Table("expression").Where("id = ?", expression.ID).UpdateColumns(&f.Expression{
-		Expression: inputs.Expression,
-		Func:       inputs.Func,
-		Op:         inputs.Op,
-		RightValue: inputs.RightValue,
-		MaxStep:    inputs.MaxStep,
-		Priority:   inputs.Priority,
-		Note:       inputs.Note,
-		Pause:      inputs.Pause,
-	})
+	uexpression := map[string]interface{}{
+		"ID":         expression.ID,
+		"Expression": inputs.Expression,
+		"Func":       inputs.Func,
+		"Op":         inputs.Op,
+		"RightValue": inputs.RightValue,
+		"MaxStep":    inputs.MaxStep,
+		"Priority":   inputs.Priority,
+		"Note":       inputs.Note,
+		"Pause":      inputs.Pause,
+	}
+	dt := tx.Model(&expression).Where("id = ?", expression.ID).Update(uexpression).Find(&expression)
 	if dt.Error != nil {
 		h.JSONR(c, expecstatus, fmt.Sprintf(
 			"update expression got error: %v", dt.Error))
 		tx.Rollback()
 		return
 	}
-	var actionTmp f.Action
+	actionTmp := f.Action{ID: expression.ActionId}
+	uaction := map[string]interface{}{
+		"ID":                 actionTmp.ID,
+		"UIC":                strings.Join(inputs.Action.UIC, ","),
+		"URL":                inputs.Action.URL,
+		"Callback":           inputs.Action.Callback,
+		"BeforeCallbackSMS":  inputs.Action.BeforeCallbackSMS,
+		"BeforeCallbackMail": inputs.Action.BeforeCallbackMail,
+		"AfterCallbackSMS":   inputs.Action.AfterCallbackSMS,
+		"AfterCallbackMail":  inputs.Action.AfterCallbackMail,
+	}
 	if dt = tx.Find(&actionTmp, expression.ActionId); dt.Error != nil {
 		h.JSONR(c, expecstatus, fmt.Sprintf(
 			"find action got error: %v", dt.Error))
 		tx.Rollback()
 		return
 	}
-	dt = tx.Table("action").Where("id = ?", actionTmp.ID).UpdateColumns(&f.Action{
-		UIC:                strings.Join(inputs.Action.UIC, ","),
-		URL:                inputs.Action.URL,
-		Callback:           inputs.Action.Callback,
-		BeforeCallbackSMS:  inputs.Action.BeforeCallbackSMS,
-		BeforeCallbackMail: inputs.Action.BeforeCallbackMail,
-		AfterCallbackSMS:   inputs.Action.AfterCallbackSMS,
-		AfterCallbackMail:  inputs.Action.AfterCallbackMail,
-	})
+	dt = tx.Model(&actionTmp).Where("id = ?", actionTmp.ID).Update(uaction)
 	if dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		tx.Rollback()

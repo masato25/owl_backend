@@ -11,6 +11,14 @@ import (
 	f "github.com/masato25/owl_backend/app/model/falcon_portal"
 )
 
+type APIGetTemplatesOutput struct {
+	Templates []CTemplate `json:"templates"`
+}
+type CTemplate struct {
+	Template   f.Template `json:"template"`
+	ParentName string     `json:"parent_name"`
+}
+
 func GetTemplates(c *gin.Context) {
 	var (
 		limit int
@@ -34,6 +42,35 @@ func GetTemplates(c *gin.Context) {
 		dt = db.Falcon.Where("tpl_name regexp ?", q).Find(&templates)
 	}
 	if dt.Error != nil {
+		log.Infof(dt.Error.Error())
+		h.JSONR(c, badstatus, dt.Error)
+		return
+	}
+	output := APIGetTemplatesOutput{}
+	output.Templates = []CTemplate{}
+	for _, t := range templates {
+		var pname string
+		pname, err := t.FindParentName()
+		if err != nil {
+			h.JSONR(c, badstatus, err)
+			return
+		}
+		output.Templates = append(output.Templates, CTemplate{
+			Template:   t,
+			ParentName: pname,
+		})
+	}
+	h.JSONR(c, output)
+	return
+}
+
+func GetTemplatesSimple(c *gin.Context) {
+	var dt *gorm.DB
+	var templates []f.Template
+	q := c.DefaultQuery("q", ".+")
+	dt = db.Falcon.Select("id, name").Where("tpl_name regexp ?", q).Find(&templates)
+	if dt.Error != nil {
+		log.Infof(dt.Error.Error())
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
@@ -70,11 +107,12 @@ func GetATemplate(c *gin.Context) {
 			return
 		}
 	}
-
+	pname, _ := tpl.FindParentName()
 	h.JSONR(c, map[string]interface{}{
-		"template": tpl,
-		"stratges": stratges,
-		"action":   action,
+		"template":    tpl,
+		"stratges":    stratges,
+		"action":      action,
+		"parent_name": pname,
 	})
 	return
 }
@@ -143,7 +181,12 @@ func UpdateTemplate(c *gin.Context) {
 		h.JSONR(c, badstatus, "You don't have permission!")
 		return
 	}
-	if dt := db.Falcon.Model(&tpl).UpdateColumns(f.Template{Name: inputs.Name, ParentID: inputs.ParentID}); dt.Error != nil {
+
+	utpl := map[string]interface{}{
+		"Name":     inputs.Name,
+		"ParentID": inputs.ParentID,
+	}
+	if dt := db.Falcon.Model(&tpl).Where("id = ?", inputs.TplID).Update(utpl); dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
@@ -200,7 +243,7 @@ type APICreateActionToTmplateInput struct {
 	AfterCallbackSMS   int    `json:"after_callback_sms" binding:"exists"`
 	BeforeCallbackMail int    `json:"before_callback_mail" binding:"exists"`
 	AfterCallbackMail  int    `json:"after_callback_mail" binding:"exists"`
-	TplId              uint   `json:"tpl_id" binding:"required"`
+	TplId              int64  `json:"tpl_id" binding:"required"`
 }
 
 func CreateActionToTmplate(c *gin.Context) {
@@ -272,15 +315,17 @@ func UpdateActionToTmplate(c *gin.Context) {
 		tx.Rollback()
 		return
 	}
-	dt := tx.Model(&action).UpdateColumns(f.Action{
-		UIC:                inputs.UIC,
-		URL:                inputs.URL,
-		Callback:           inputs.Callback,
-		BeforeCallbackSMS:  inputs.BeforeCallbackSMS,
-		BeforeCallbackMail: inputs.BeforeCallbackMail,
-		AfterCallbackMail:  inputs.AfterCallbackMail,
-		AfterCallbackSMS:   inputs.AfterCallbackSMS,
-	})
+
+	uaction := map[string]interface{}{
+		"UIC":                inputs.UIC,
+		"URL":                inputs.URL,
+		"Callback":           inputs.Callback,
+		"BeforeCallbackSMS":  inputs.BeforeCallbackSMS,
+		"BeforeCallbackMail": inputs.BeforeCallbackMail,
+		"AfterCallbackMail":  inputs.AfterCallbackMail,
+		"AfterCallbackSMS":   inputs.AfterCallbackSMS,
+	}
+	dt := tx.Model(&action).Where("id = ?", inputs.ID).Update(uaction)
 	if dt.Error != nil {
 		h.JSONR(c, badstatus, dt.Error)
 		tx.Rollback()

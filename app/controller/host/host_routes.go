@@ -36,4 +36,9 @@ func Routes(r *gin.Engine) {
 	hostr.POST("/aggregator", CreateAggregator)
 	hostr.PUT("/aggregator", UpdateAggregator)
 	hostr.DELETE("/aggregator/:id", DeleteAggregator)
+
+	//template
+	hostr.POST("/hostgroup/template", BindTemplateToGroup)
+	hostr.PUT("/hostgroup/template", UnBindTemplateToGroup)
+	hostr.GET("/hostgroup/:host_group/template", GetTemplateOfHostGroup)
 }

@@ -46,6 +46,18 @@ func (this Team) Members() (users []User, err error) {
 	return
 }
 
+func (this Team) GetCreatorName() (userName string, err error) {
+	userName = "unknown"
+	db := config.Con()
+	user := User{ID: this.Creator}
+	if dt := db.Uic.Find(&user); dt.Error != nil {
+		err = dt.Error
+	} else {
+		userName = user.Name
+	}
+	return
+}
+
 func arrIntToString(arr []int64) (result string, err error) {
 	result = ""
 	for indx, a := range arr {

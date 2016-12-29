@@ -46,7 +46,7 @@ type APICreateStrategyInput struct {
 	Note       string `json:"note"`
 	RunBegin   string `json:"run_begin"`
 	RunEnd     string `json:"run_end"`
-	TplId      uint   `json:"tpl_id" binding:"required"`
+	TplId      int64  `json:"tpl_id" binding:"required"`
 }
 
 func (this APICreateStrategyInput) CheckFormat() (err error) {
@@ -166,17 +166,18 @@ func UpdateStrategy(c *gin.Context) {
 		h.JSONR(c, expecstatus, fmt.Sprintf("find strategy got error:%v", dt.Error))
 		return
 	}
-	strategy.Metric = inputs.Metric
-	strategy.Tags = inputs.Tags
-	strategy.MaxStep = inputs.MaxStep
-	strategy.Priority = inputs.Priority
-	strategy.Func = inputs.Func
-	strategy.Op = inputs.Op
-	strategy.RightValue = inputs.RightValue
-	strategy.Note = inputs.Note
-	strategy.RunBegin = inputs.RunBegin
-	strategy.RunEnd = inputs.RunEnd
-	if dt := db.Falcon.Table("strategy").Where("id = ?", strategy.ID).Update(&strategy); dt.Error != nil {
+	ustrategy := map[string]interface{}{
+		"Metric":     inputs.Metric,
+		"Tags":       inputs.Tags,
+		"MaxStep":    inputs.MaxStep,
+		"Priority":   inputs.Priority,
+		"Func":       inputs.Func,
+		"Op":         inputs.Op,
+		"RightValue": inputs.RightValue,
+		"Note":       inputs.Note,
+		"RunBegin":   inputs.RunBegin,
+		"RunEnd":     inputs.RunEnd}
+	if dt := db.Falcon.Model(&strategy).Where("id = ?", strategy.ID).Update(ustrategy); dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}

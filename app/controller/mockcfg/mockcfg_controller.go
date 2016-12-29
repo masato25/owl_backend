@@ -98,16 +98,17 @@ func UpdateNoData(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
-	mockcfg := f.Mockcfg{
-		Obj:     inputs.Obj,
-		ObjType: inputs.ObjType,
-		Metric:  inputs.Metric,
-		Tags:    inputs.Tags,
-		DsType:  inputs.DsType,
-		Step:    inputs.Step,
-		Mock:    inputs.Mock,
+	mockcfg := &f.Mockcfg{ID: inputs.ID}
+	umockcfg := map[string]interface{}{
+		"Obj":     inputs.Obj,
+		"ObjType": inputs.ObjType,
+		"Metric":  inputs.Metric,
+		"Tags":    inputs.Tags,
+		"DsType":  inputs.DsType,
+		"Step":    inputs.Step,
+		"Mock":    inputs.Mock,
 	}
-	if dt := db.Falcon.Table("mockcfg").Where("id = ?", inputs.ID).UpdateColumns(&mockcfg); dt.Error != nil {
+	if dt := db.Falcon.Model(&mockcfg).Where("id = ?", inputs.ID).Update(umockcfg).Find(&mockcfg); dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}

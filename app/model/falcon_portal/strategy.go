@@ -30,7 +30,7 @@ type Strategy struct {
 	Note       string `json:"note" gorm:"column:note"`
 	RunBegin   string `json:"run_begin" gorm:"column:run_begin"`
 	RunEnd     string `json:"run_end" gorm:"column:run_end"`
-	TplId      uint   `json:"tpl_id" gorm:"column:tpl_id"`
+	TplId      int64  `json:"tpl_id" gorm:"column:tpl_id"`
 }
 
 func (this Strategy) TableName() string {

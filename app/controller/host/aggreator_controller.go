@@ -153,13 +153,14 @@ func UpdateAggregator(c *gin.Context) {
 			return
 		}
 	}
-	aggregator.Numerator = inputs.Numerator
-	aggregator.Denominator = inputs.Denominator
-	aggregator.Endpoint = inputs.Endpoint
-	aggregator.Metric = inputs.Metric
-	aggregator.Tags = inputs.Tags
-	aggregator.Step = inputs.Step
-	if dt := db.Falcon.Table("cluster").Where("id = ?", aggregator.ID).Update(&aggregator); dt.Error != nil {
+	uaggregator := map[string]interface{}{
+		"Numerator":   inputs.Numerator,
+		"Denominator": inputs.Denominator,
+		"Endpoint":    inputs.Endpoint,
+		"Metric":      inputs.Metric,
+		"Tags":        inputs.Tags,
+		"Step":        inputs.Step}
+	if dt := db.Falcon.Model(&aggregator).Where("id = ?", aggregator.ID).Update(uaggregator).Find(&aggregator); dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}

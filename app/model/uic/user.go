@@ -9,11 +9,11 @@ type User struct {
 	Name   string `json:"name"`
 	Cnname string `json:"cnname"`
 	Passwd string `json:"-"`
-	Email  string `json:"email,omitempty"`
-	Phone  string `json:"phone,omitempty"`
-	IM     string `json:"im,omitempty" gorm:"column:im"`
-	QQ     string `json:"qq,omitempty" gorm:"column:qq"`
-	Role   int    `json:"role,omitempty"`
+	Email  string `json:"email"`
+	Phone  string `json:"phone"`
+	IM     string `json:"im" gorm:"column:im"`
+	QQ     string `json:"qq" gorm:"column:qq"`
+	Role   int    `json:"role"`
 }
 
 func (this User) IsAdmin() bool {
