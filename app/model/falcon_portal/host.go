@@ -1,6 +1,9 @@
 package falcon_portal
 
 import (
+	"errors"
+	"fmt"
+
 	con "github.com/masato25/owl_backend/config"
 )
 
@@ -39,4 +42,53 @@ func (this Host) Existing() (int64, bool) {
 	} else {
 		return 0, false
 	}
+}
+
+func (this Host) RelatedGrp() (Grps []HostGroup) {
+	db := con.Con()
+	grpHost := []GrpHost{}
+	db.Falcon.Select("grp_id").Where("host_id = ?", this.ID).Find(&grpHost)
+	tids := []int64{}
+	for _, t := range grpHost {
+		tids = append(tids, t.GrpID)
+	}
+	tidStr, _ := arrInt64ToString(tids)
+	Grps = []HostGroup{}
+	db.Falcon.Where(fmt.Sprintf("id in (%s)", tidStr)).Find(&Grps)
+	return
+}
+
+func (this Host) RelatedTpl() (tpls []Template) {
+	db := con.Con()
+	grps := this.RelatedGrp()
+	gids := []int64{}
+	for _, g := range grps {
+		gids = append(gids, g.ID)
+	}
+	gidStr, _ := arrInt64ToString(gids)
+	grpTpls := []GrpTpl{}
+	db.Falcon.Select("tpl_id").Where(fmt.Sprintf("grp_id in (%s)", gidStr)).Find(&grpTpls)
+	tids := []int64{}
+	for _, t := range grpTpls {
+		tids = append(tids, t.TplID)
+	}
+	tidStr, _ := arrInt64ToString(tids)
+	tpls = []Template{}
+	db.Falcon.Where(fmt.Sprintf("id in (%s)", tidStr)).Find(&tpls)
+	return
+}
+
+func arrInt64ToString(arr []int64) (result string, err error) {
+	result = ""
+	for indx, a := range arr {
+		if indx == 0 {
+			result = fmt.Sprintf("%v", a)
+		} else {
+			result = fmt.Sprintf("%v,%v", result, a)
+		}
+	}
+	if result == "" {
+		err = errors.New(fmt.Sprintf("array is empty, err: %v", arr))
+	}
+	return
 }

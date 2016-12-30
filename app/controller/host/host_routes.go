@@ -41,4 +41,8 @@ func Routes(r *gin.Engine) {
 	hostr.POST("/hostgroup/template", BindTemplateToGroup)
 	hostr.PUT("/hostgroup/template", UnBindTemplateToGroup)
 	hostr.GET("/hostgroup/:host_group/template", GetTemplateOfHostGroup)
+
+	//host
+	hostr.GET("/host/:host_id/template", GetGrpsRelatedHost)
+	hostr.GET("/host/:host_id/hostgroup", GetTplsRelatedHost)
 }

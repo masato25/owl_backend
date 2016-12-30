@@ -74,3 +74,48 @@ func GetHostGroupWithTemplate(c *gin.Context) {
 	})
 	return
 }
+
+func GetGrpsRelatedHost(c *gin.Context) {
+	hostIDtmp := c.Params.ByName("host_id")
+	if hostIDtmp == "" {
+		h.JSONR(c, badstatus, "host id is missing")
+		return
+	}
+	hostID, err := strconv.Atoi(hostIDtmp)
+	if err != nil {
+		log.Debugf("host id: %v", hostIDtmp)
+		h.JSONR(c, badstatus, err)
+		return
+	}
+
+	host := f.Host{ID: int64(hostID)}
+	if dt := db.Falcon.Find(&host); dt.Error != nil {
+		h.JSONR(c, expecstatus, dt.Error)
+		return
+	}
+	grps := host.RelatedGrp()
+	h.JSONR(c, grps)
+	return
+}
+
+func GetTplsRelatedHost(c *gin.Context) {
+	hostIDtmp := c.Params.ByName("host_id")
+	if hostIDtmp == "" {
+		h.JSONR(c, badstatus, "host id is missing")
+		return
+	}
+	hostID, err := strconv.Atoi(hostIDtmp)
+	if err != nil {
+		log.Debugf("host id: %v", hostIDtmp)
+		h.JSONR(c, badstatus, err)
+		return
+	}
+	host := f.Host{ID: int64(hostID)}
+	if dt := db.Falcon.Find(&host); dt.Error != nil {
+		h.JSONR(c, expecstatus, dt.Error)
+		return
+	}
+	tpls := host.RelatedTpl()
+	h.JSONR(c, tpls)
+	return
+}
