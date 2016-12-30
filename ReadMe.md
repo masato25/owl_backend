@@ -101,8 +101,9 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 
 ### HostGroup / Host
 
-For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/hostgroup.html)
-For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/host.html)
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/hostgroup.html) *hostgroup
+
+For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/host.html) *host
 
 
 ### Plugin
