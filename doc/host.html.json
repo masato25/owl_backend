@@ -2,7 +2,7 @@
   "ApiSpecs": [
     {
       "HttpVerb": "GET",
-      "Path": "/api/v1/host/1647/hostgroup",
+      "Path": "/api/v1/host/1647/template",
       "Calls": [
         {
           "Id": 0,
@@ -36,7 +36,7 @@
       "Calls": [
         {
           "Id": 1,
-          "CurrentPath": "/api/v1/host/1647/template",
+          "CurrentPath": "/api/v1/host/1647/hostgroup",
           "MethodType": "GET",
           "PostForm": null,
           "RequestHeader": {
