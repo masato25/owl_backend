@@ -43,6 +43,6 @@ func Routes(r *gin.Engine) {
 	hostr.GET("/hostgroup/:host_group/template", GetTemplateOfHostGroup)
 
 	//host
-	hostr.GET("/host/:host_id/template", GetGrpsRelatedHost)
-	hostr.GET("/host/:host_id/hostgroup", GetTplsRelatedHost)
+	hostr.GET("/host/:host_id/template", GetTplsRelatedHost)
+	hostr.GET("/host/:host_id/hostgroup", GetGrpsRelatedHost)
 }

@@ -6,7 +6,7 @@
       "Calls": [
         {
           "Id": 0,
-          "CurrentPath": "/api/v1/host/1647/hostgroup",
+          "CurrentPath": "/api/v1/host/1647/template",
           "MethodType": "GET",
           "PostForm": null,
           "RequestHeader": {
@@ -32,7 +32,7 @@
     },
     {
       "HttpVerb": "GET",
-      "Path": "/api/v1/host/1647/template",
+      "Path": "/api/v1/host/1647/hostgroup",
       "Calls": [
         {
           "Id": 1,
