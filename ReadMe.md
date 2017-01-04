@@ -4,10 +4,23 @@
 
 web api backend made for open-falcon
 
-## Base
-All error return code plaese [`refer here`](https://golang.org/src/net/http/status.go)
+开源版本 open-falcon 後台, 将以下模组的操作功能api化:
+* Fe
+  * 使用者,群组管理
+* Portal
+  * HostGroup, Host 管理
+  * Template, 告警策略管理
+* Graph
+  * Host/Counter列表查询
+* No-Data
+  * NoData策略设置api
+* Dashboard
+  * 具备数据查询接口功能
 
-### Graph
+## Base
+All error return code plaese refer [`here`](https://golang.org/src/net/http/status.go)
+
+### Dashboard
 
 #### Get endpoint by regexp `/api/v1/graph/endpoint?q=${string}`
 * [GET]
@@ -120,6 +133,8 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 ### NoData
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/nodata.html)
 
-## ToDo
+# ToDo
+* Screen
 
-### Screen
+ps.
+跨域问题實做可以參考 `sample_for_cross_api`

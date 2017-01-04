@@ -20,6 +20,7 @@
     "numberOfReplicas": 500
   },
   "gen_doc": false,
+  "gen_doc_path": "doc/module.html",
   "salt": "pleaseinputwhichyouareusingnow",
   "web_port": ":8888",
   "skip_auth": false
