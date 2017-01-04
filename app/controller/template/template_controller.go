@@ -177,7 +177,7 @@ func UpdateTemplate(c *gin.Context) {
 		h.JSONR(c, badstatus, dt.Error)
 		return
 	}
-	if tpl.CreateUser != user.Name || !user.IsAdmin() {
+	if tpl.CreateUser != user.Name && !user.IsAdmin() {
 		h.JSONR(c, badstatus, "You don't have permission!")
 		return
 	}
