@@ -21,6 +21,7 @@ func GetHostGroups(c *gin.Context) {
 	)
 	pageTmp := c.DefaultQuery("page", "")
 	limitTmp := c.DefaultQuery("limit", "")
+	q := c.DefaultQuery("q", ".+")
 	page, limit, err = h.PageParser(pageTmp, limitTmp)
 	if err != nil {
 		h.JSONR(c, badstatus, err.Error())
@@ -29,9 +30,9 @@ func GetHostGroups(c *gin.Context) {
 	var hostgroups []f.HostGroup
 	var dt *gorm.DB
 	if limit != -1 && page != -1 {
-		dt = db.Falcon.Raw(fmt.Sprintf("SELECT * from grp limit %d,%d", page, limit)).Scan(&hostgroups)
+		dt = db.Falcon.Raw(fmt.Sprintf("SELECT * from grp  where grp_name regexp '%s' limit %d,%d", q, page, limit)).Scan(&hostgroups)
 	} else {
-		dt = db.Falcon.Table("grp").Find(&hostgroups)
+		dt = db.Falcon.Table("grp").Where("grp_name regexp ?", q).Find(&hostgroups)
 	}
 	if dt.Error != nil {
 		h.JSONR(c, expecstatus, dt.Error)
