@@ -66,21 +66,21 @@ func GenQParam(endpoint string, counter string, consolFun string, stime int64, e
 func QueryOne(para cmodel.GraphQueryParam) (resp *cmodel.GraphQueryResponse, err error) {
 	start, end := para.Start, para.End
 	endpoint, counter := para.Endpoint, para.Counter
-
+	resp = &cmodel.GraphQueryResponse{}
 	pool, addr, err := selectPool(endpoint, counter)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	conn, err := pool.Fetch()
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	rpcConn := conn.(spool.RpcClient)
 	if rpcConn.Closed() {
 		pool.ForceClose(conn)
-		return nil, errors.New("conn closed")
+		return resp, errors.New("conn closed")
 	}
 
 	type ChResult struct {
