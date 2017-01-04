@@ -97,7 +97,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 	websession, _ := h.GetSession(c)
-	var user uic.User
+	user := uic.User{}
 	db.Uic.Table("user").Where("name = ?", websession.Name).Scan(&user)
 	if user.ID == 0 {
 		h.JSONR(c, http.StatusBadRequest, "name is not existing")
@@ -111,7 +111,7 @@ func UpdateUser(c *gin.Context) {
 		"IM":     inputs.IM,
 		"QQ":     inputs.QQ,
 	}
-	dt := db.Uic.Model(&user).Where("id = ?", uid).Save(&uuser)
+	dt := db.Uic.Model(&user).Where("id = ?", uid).Update(uuser)
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
