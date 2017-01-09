@@ -36,29 +36,29 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 
 ### User
 
-#### Login User `/api/v1/user/login`
+#### Login user `/api/v1/user/login`
 * [POST]
 * ex. "name=xxx;password=xxx"
 * Error: 400
 
-#### Logout User `/api/v1/user/logout`
+#### Logout user `/api/v1/user/logout`
 * [POST]
 * [cookie]/[post_form] ex. "name=xxx;sig=xxx"
 * Error: 400
 
-#### Auth User `/api/v1/user/auth_session`
+#### Auth user / Session checking `/api/v1/user/auth_session`
 * [GET]
 * [cookie]/[post_form] ex. "name=xxx;sig=xxx"
 * Error: 401
 
-#### Create User `/api/v1/user/create`
+#### Create user `/api/v1/user/create`
 * [POST]
 * ex. "name=xxx;password=xxx;cnname=xxx;email=xxx;phone=xxx;im=xxx;qq=xxx"
 
-#### Update User `/api/v1/user/update`
+#### Update user `/api/v1/user/update`
 * [PUT]
 
-#### Change User password `/api/v1/user/cgpasswd`
+#### Change user password `/api/v1/user/cgpasswd`
 * [PUT]
 
 #### User list `/api/v1/user/users`
@@ -68,51 +68,51 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/user.html)
 ### Admin
 
-#### (Admin) Change User role `/api/v1/admim/change_user_role`
+#### (Admin) Change user role `/api/v1/admim/change_user_role`
 * [PUT]
 
-#### (Admin) Change User password `/api/v1/admim//change_user_passwd`
+#### (Admin) Change user password `/api/v1/admim//change_user_passwd`
 * [PUT]
 
-#### (Admin) Delete A user `/api/v1/admin/delete_user`
+#### (Admin) Delete a user `/api/v1/admin/delete_user`
 * [DELETE]
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/admin.html)
 
 ### Team
 
-#### Get Team List `/api/v1/team`
+#### Get team List `/api/v1/team`
 * [GET]
 * support regexp query ex. "q=a.+"
 
-### Get Team by id `/api/v1/team/:team_id`
+#### Get team by id `/api/v1/team/:team_id`
 * [GET]
 * ex. /api/v1/team/1
 
-### Create A team  `/api/v1/team`
+#### Create a team  `/api/v1/team`
 * [POST]
 * ex. params
 * team_name `name of team`
 * resume `descript of this team`
 * users `team member list (user id)`
 
-### Update A team `/team`
+#### Update a team `/team`
 * [PUT]
 * team_id `team_id of db's primary key`
 * resume `descript of this team`
 * users `team member list (user id)`
 
-### Delete A team `/team/:team_id`
+#### Delete a team `/team/:team_id`
 * [DELETE]
 * ex. /api/v1/team/1
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/team.html)
 
-### Template / Strategy
+#### Template / Strategy
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/template.html)
 
-### HostGroup / Host
+#### HostGroup / Host
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/hostgroup.html) *hostgroup
 
@@ -120,6 +120,9 @@ For more api please visit [`here`](https://htmlpreview.github.io/?https://github
 
 
 ### Plugin
+#### Unbind Plugin of a hostgroup / Delete Plugin: `/plugin/:plugin_id`
+* [DELETE]
+* One Plugin only relate one hostgroup, so if you want unbind a plugin of a hostgroup, just use `delete` method to clean it.
 
 For more api please visit [`here`](https://htmlpreview.github.io/?https://github.com/masato25/owl_backend/blob/master/doc/plugin.html)
 
