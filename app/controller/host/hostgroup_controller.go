@@ -3,6 +3,7 @@ package host
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
 
 	log "github.com/Sirupsen/logrus"
@@ -190,6 +191,7 @@ func DeleteHostGroup(c *gin.Context) {
 
 func GetHostGroup(c *gin.Context) {
 	grpIDtmp := c.Params.ByName("host_group")
+	q := c.DefaultQuery("q", ".+")
 	if grpIDtmp == "" {
 		h.JSONR(c, badstatus, "grp id is missing")
 		return
@@ -215,7 +217,9 @@ func GetHostGroup(c *gin.Context) {
 		var host f.Host
 		db.Falcon.Find(&host, grph.HostID)
 		if host.ID != 0 {
-			hosts = append(hosts, host)
+			if ok, err := regexp.MatchString(q, host.Hostname); ok == true && err == nil {
+				hosts = append(hosts, host)
+			}
 		}
 	}
 	h.JSONR(c, map[string]interface{}{
