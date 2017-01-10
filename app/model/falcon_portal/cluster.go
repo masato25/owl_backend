@@ -1,5 +1,9 @@
 package falcon_portal
 
+import (
+	con "github.com/masato25/owl_backend/config"
+)
+
 // +-------------+------------------+------+-----+-------------------+-----------------------------+
 // | Field       | Type             | Null | Key | Default           | Extra                       |
 // +-------------+------------------+------+-----+-------------------+-----------------------------+
@@ -31,4 +35,18 @@ type Cluster struct {
 
 func (this Cluster) TableName() string {
 	return "cluster"
+}
+
+func (this Cluster) HostGroupName() (name string, err error) {
+	if this.GrpId == 0 {
+		return
+	}
+	db := con.Con()
+	var hg HostGroup
+	hg.ID = this.GrpId
+	if dt := db.Falcon.Find(&hg); dt.Error != nil {
+		return name, dt.Error
+	}
+	name = hg.Name
+	return
 }

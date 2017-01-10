@@ -46,7 +46,19 @@ func GetAggregatorListOfGrp(c *gin.Context) {
 		h.JSONR(c, expecstatus, dt.Error)
 		return
 	}
-	h.JSONR(c, aggregators)
+	hostgroupName := ""
+	if len(aggregators) != 0 {
+		hostgroupName, err = aggregators[0].HostGroupName()
+		if err != nil {
+			h.JSONR(c, badstatus, err)
+			return
+		}
+	}
+
+	h.JSONR(c, map[string]interface{}{
+		"hostgroup":   hostgroupName,
+		"aggregators": aggregators,
+	})
 	return
 }
 
