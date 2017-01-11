@@ -19,6 +19,7 @@
     "call_timeout": 5000,
     "numberOfReplicas": 500
   },
+  access_control: true,
   "gen_doc": false,
   "gen_doc_path": "doc/module.html",
   "salt": "pleaseinputwhichyouareusingnow",

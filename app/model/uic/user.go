@@ -2,6 +2,7 @@ package uic
 
 import (
 	con "github.com/masato25/owl_backend/config"
+	"github.com/spf13/viper"
 )
 
 type User struct {
@@ -16,7 +17,14 @@ type User struct {
 	Role   int    `json:"role"`
 }
 
+func skipAccessControll() bool {
+	return !viper.GetBool("access_control")
+}
+
 func (this User) IsAdmin() bool {
+	if skipAccessControll() {
+		return true
+	}
 	if this.Role == 2 || this.Role == 1 {
 		return true
 	}
@@ -24,6 +32,9 @@ func (this User) IsAdmin() bool {
 }
 
 func (this User) IsSuperAdmin() bool {
+	if skipAccessControll() {
+		return true
+	}
 	if this.Role == 2 {
 		return true
 	}
