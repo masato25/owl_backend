@@ -3,12 +3,11 @@ category: User
 apiurl: '/api/v1/user/u/#{user_id}'
 title: 'Get User info by id'
 type: 'GET'
-
+sample_doc: 'user.html'
 layout: default
 ---
 
-拿取當前使用者資訊
-* 需要[Session](#/authentication)
+* [Session](#/authentication) Required
 * `Admin` usage
 * ex. /api/v1/user/u/4
 

@@ -3,12 +3,12 @@ category: User
 apiurl: '/api/v1/user/logout'
 title: 'Logout'
 type: 'GET'
-
+sample_doc: 'user.html'
 layout: default
 ---
 
 使用者登出
-* 需要[Session](#/authentication)
+* [Session](#/authentication) Required
 
 ### Response
 

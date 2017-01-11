@@ -3,12 +3,12 @@ category: User
 apiurl: '/api/v1/user/update'
 title: 'Update User'
 type: 'PUT'
-
+sample_doc: 'user.html'
 layout: default
 ---
 
 更新使用者
-* 需要[Session](#/authentication)
+* [Session](#/authentication) Required
 
 ### Request
 ```{

@@ -1,5 +1,5 @@
 ---
-title: 'Session检查'
+title: 'Auth Session'
 apiurl: '/api/v1/user/login'
 type: 'GET'
 layout: default
@@ -9,9 +9,9 @@ layout: default
 
 ### RequestHeader
 透过RequestHeader 的 Apitoken做验证
-``"RequestHeader": {
+```"RequestHeader": {
   "Apitoken": "{\"name\":\"root\",\"sig\":\"427d6803b78311e68afd0242ac130006\"}",
-  "X-Forwarded-For": " 127.0.0.1\r"
+  "X-Forwarded-For": " 127.0.0.1"
 }```
 
 ### Response

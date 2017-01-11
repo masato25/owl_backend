@@ -3,12 +3,11 @@ category: User
 apiurl: '/api/v1/user/create'
 title: 'Create User'
 type: 'POST'
-
+sample_doc: 'user.html'
 layout: default
 ---
 
-新增使用者
-* 需要[Session](#/authentication)
+* [Session](#/authentication) Required
 
 ### Request
 ```{"name": "test","password": "test"}```

@@ -3,7 +3,7 @@ category: User
 apiurl: '/api/v1/user/login'
 title: 'Login'
 type: 'POST'
-
+sample_doc: 'user.html'
 layout: default
 ---
 

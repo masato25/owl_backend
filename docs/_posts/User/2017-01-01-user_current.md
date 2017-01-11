@@ -3,12 +3,12 @@ category: User
 apiurl: '/api/v1/user/current'
 title: 'Current User info'
 type: 'GET'
-
+sample_doc: 'user.html'
 layout: default
 ---
 
-拿取當前使用者資訊
-* 需要[Session](#/authentication)
+* [Session](#/authentication) Required
+* 当前使用者资讯
 
 ### Response
 

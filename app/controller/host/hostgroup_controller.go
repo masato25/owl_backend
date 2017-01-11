@@ -159,6 +159,18 @@ func DeleteHostGroup(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
+	user, _ := h.GetUser(c)
+	hostgroup := f.HostGroup{ID: int64(grpID)}
+	if !user.IsAdmin() {
+		if dt := db.Falcon.Find(&hostgroup); dt.Error != nil {
+			h.JSONR(c, badstatus, dt.Error)
+			return
+		}
+		if hostgroup.CreateUser == user.Name {
+			h.JSONR(c, badstatus, "You don't have permission!")
+			return
+		}
+	}
 	tx := db.Falcon.Begin()
 	//delete hostgroup referance of grp_host table
 	if dt := tx.Where("grp_id = ?", grpID).Delete(&f.GrpHost{}); dt.Error != nil {
