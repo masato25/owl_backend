@@ -59,7 +59,7 @@ func Teams(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
-	var outputs []CTeam
+	outputs := []CTeam{}
 	for _, t := range teams {
 		cteam := CTeam{Team: t}
 		user, err := t.Members()
