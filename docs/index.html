@@ -13,7 +13,7 @@ layout: default
 			<h2>{% if post.type %}<code><b>{{ post.type }}</b> {{ post.apiurl }}</code> {% endif %}{{ post.title }}</h2></a>
     <section class='body'>
       {{ post.content }}
-			<div>{% if post.sample_doc %} For more example, see the <a href=/doc/{{post.sample_doc}}>{{post.sample_doc}}</a>{% endif %}</div>
+			<div>{% if post.sample_doc %} For more example, see the <a href=doc/{{post.sample_doc}}>{{post.sample_doc}}</a>{% endif %}</div>
     </section>
   </article>
 {% endfor %}
