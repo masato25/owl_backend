@@ -1,7 +1,6 @@
 ---
 exclude: ['README.markdown']
 permalink: ':title'
-highlighter: true
 safe: false
 title: 'Owl_Backend'
 project_name: 'owl_backend'
