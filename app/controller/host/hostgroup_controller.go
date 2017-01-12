@@ -289,10 +289,7 @@ func UnBindTemplateToGroup(c *gin.Context) {
 	}
 	db.Falcon.Where("grp_id = ? and tpl_id = ?", inputs.GrpID, inputs.TplID).Find(&grpTpl)
 	switch {
-	case grpTpl.BindUser == 0:
-		h.JSONR(c, badstatus, errors.New("this binding is not existing, reject!"))
-		return
-	case !user.IsAdmin() || grpTpl.BindUser != user.ID:
+	case !user.IsAdmin() && grpTpl.BindUser != user.ID:
 		h.JSONR(c, badstatus, errors.New("You don't have permission can do this."))
 		return
 	}
