@@ -191,6 +191,42 @@
           "ResponseCode": 200
         }
       ]
+    },
+    {
+      "HttpVerb": "GET",
+      "Path": "/api/v1/graph/endpointstr_counter",
+      "Calls": [
+        {
+          "Id": 0,
+          "CurrentPath": "/api/v1/graph/endpointstr_counter",
+          "MethodType": "GET",
+          "PostForm": null,
+          "RequestHeader": {
+            "Apitoken": "",
+            "Cookie": " Hm_lvt_ddcc80a8a8368fff90829a8d3ea26806=1484280662\r",
+            "Upgrade-Insecure-Requests": " 1\r",
+            "X-Forwarded-For": " "
+          },
+          "CommonRequestHeaders": null,
+          "ResponseHeader": {
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Headers": "Content-Type, Content-Length, Apitoken",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, UPDATE",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Length",
+            "Access-Control-Max-Age": "86400",
+            "Content-Type": "application/json; charset=utf-8"
+          },
+          "RequestUrlParams": {
+            "endpoints": "agent01,agent02",
+            "limit": "5",
+            "metricQuery": ".+"
+          },
+          "RequestBody": "",
+          "ResponseBody": "[\"df.inodes.free.percent/fstype=ext4,mount=/\",\"disk.io.read_sectors/device=sda\",\"disk.io.write_merged/device=sdh\",\"net.if.total.packets/iface=eth4\",\"snmp.Udp.RcvbufErrors\"]",
+          "ResponseCode": 200
+        }
+      ]
     }
   ]
 }

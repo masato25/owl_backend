@@ -3,6 +3,7 @@ package graph
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"net/http"
 
@@ -50,6 +51,48 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 		h.JSONR(c, http.StatusBadRequest, "eid is missing")
 	} else {
 		eids := utils.ConverIntStringToList(eid)
+		if eids == "" {
+			h.JSONR(c, http.StatusBadRequest, "input error, please check your input info.")
+			return
+		} else {
+			eids = fmt.Sprintf("(%s)", eids)
+		}
+		var counters []m.EndpointCounter
+		db.Graph.Table("endpoint_counter").Select("counter").Where(fmt.Sprintf("endpoint_id IN %s AND counter regexp '%s' ", eids, metricQuery)).Scan(&counters)
+		countersResp := []interface{}{}
+		for _, c := range counters {
+			countersResp = append(countersResp, c.Counter)
+		}
+		result := utils.UniqSet(countersResp)
+		result = utils.MapTake(result, limit)
+		h.JSONR(c, result)
+	}
+	return
+}
+
+func EndpointStrCounterRegexpQuery(c *gin.Context) {
+	endpoints := c.DefaultQuery("endpoints", "")
+	metricQuery := c.DefaultQuery("metricQuery", ".+")
+	limitTmp := c.DefaultQuery("limit", "500")
+	limit, err := strconv.Atoi(limitTmp)
+	if err != nil {
+		h.JSONR(c, http.StatusBadRequest, err)
+		return
+	}
+	if endpoints == "" {
+		h.JSONR(c, http.StatusBadRequest, "endpoints is missing")
+	} else {
+		enps := strings.Split(endpoints, ",")
+		enpids := []int{}
+		rows, _ := db.Graph.Table("endpoint").Select("id").Where("endpoint IN (?)", enps).Rows()
+		for rows.Next() {
+			id := struct {
+				Id int
+			}{}
+			db.Falcon.ScanRows(rows, &id)
+			enpids = append(enpids, id.Id)
+		}
+		eids, _ := utils.ArrIntToString(enpids)
 		if eids == "" {
 			h.JSONR(c, http.StatusBadRequest, "input error, please check your input info.")
 			return
