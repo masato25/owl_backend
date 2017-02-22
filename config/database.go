@@ -13,6 +13,8 @@ type DBPool struct {
 	Graph     *gorm.DB
 	Uic       *gorm.DB
 	Dashboard *gorm.DB
+	//fastweb only
+	Boss *gorm.DB
 }
 
 var (
@@ -69,6 +71,17 @@ func InitDB(loggerlevel bool) (err error) {
 	dashd.SingularTable(true)
 	dbp.Dashboard = dashd
 
+	//fastweb only
+	var b *sql.DB
+	bossd, err := gorm.Open("mysql", viper.GetString("db.boss"))
+	bossd.Dialect().SetDB(b)
+	dashd.LogMode(loggerlevel)
+	if err != nil {
+		return
+	}
+	bossd.SingularTable(true)
+	dbp.Boss = bossd
+
 	SetLogLevel(loggerlevel)
 	return
 }
@@ -88,6 +101,12 @@ func CloseDB() (err error) {
 	}
 
 	err = dbp.Dashboard.Close()
+	if err != nil {
+		return
+	}
+
+	//fastweb only
+	err = dbp.Boss.Close()
 	if err != nil {
 		return
 	}

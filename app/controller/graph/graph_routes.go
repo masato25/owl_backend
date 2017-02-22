@@ -15,10 +15,12 @@ const expecstatus = http.StatusExpectationFailed
 
 func Routes(r *gin.Engine) {
 	db = config.Con()
-	authapi := r.Group("/api/v1")
-	authapi.Use(utils.AuthSessionMidd)
-	authapi.GET("/graph/endpoint", EndpointRegexpQuery)
-	authapi.GET("/graph/endpoint_counter", EndpointCounterRegexpQuery)
-	authapi.GET("/graph/endpointstr_counter", EndpointStrCounterRegexpQuery)
-	authapi.POST("/graph/history", QueryGraphDrawData)
+	grphapi := r.Group("/api/v1/graph")
+	grphapi.Use(utils.AuthSessionMidd)
+	grphapi.GET("/endpoint", EndpointRegexpQuery)
+	grphapi.GET("/endpoint_counter", EndpointCounterRegexpQuery)
+	grphapi.GET("/endpointstr_counter", EndpointStrCounterRegexpQuery)
+	grphapi.POST("/history", QueryGraphDrawData)
+	owlgraph := r.Group("/api/v1/owlgraph")
+	owlgraph.GET("/keyword_search", HostsSearching)
 }
