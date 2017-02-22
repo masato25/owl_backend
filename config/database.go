@@ -86,5 +86,10 @@ func CloseDB() (err error) {
 	if err != nil {
 		return
 	}
+
+	err = dbp.Dashboard.Close()
+	if err != nil {
+		return
+	}
 	return
 }

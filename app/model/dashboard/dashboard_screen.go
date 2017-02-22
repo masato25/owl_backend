@@ -1,5 +1,9 @@
 package dashboard
 
+import (
+	con "github.com/masato25/owl_backend/config"
+)
+
 // +-------+------------------+------+-----+-------------------+-----------------------------+
 // | Field | Type             | Null | Key | Default           | Extra                       |
 // +-------+------------------+------+-----+-------------------+-----------------------------+
@@ -17,4 +21,11 @@ type DashboardScreen struct {
 
 func (this DashboardScreen) TableName() string {
 	return "dashboard_screen"
+}
+
+func (this DashboardScreen) Graphs() []DashboardGraph {
+	db := con.Con()
+	graphs := []DashboardGraph{}
+	db.Dashboard.Model(&graphs).Where("screen_id = ?", this.ID).Scan(&graphs)
+	return graphs
 }

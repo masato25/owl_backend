@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/masato25/owl_backend/app/controller/dashboard_graph"
+	"github.com/masato25/owl_backend/app/controller/dashboard_screen"
 	"github.com/masato25/owl_backend/app/controller/expression"
 	"github.com/masato25/owl_backend/app/controller/graph"
 	"github.com/masato25/owl_backend/app/controller/host"
@@ -26,5 +28,7 @@ func StartGin(port string, r *gin.Engine) {
 	host.Routes(r)
 	expression.Routes(r)
 	mockcfg.Routes(r)
+	dashboard_screen.Routes(r)
+	dashboard_graph.Routes(r)
 	r.Run()
 }

@@ -135,6 +135,7 @@ func QueryGraphDrawData(c *gin.Context) {
 		}
 	}
 	h.JSONR(c, respData)
+	return
 }
 
 func fetchData(hostname string, counter string, consolFun string, startTime int64, endTime int64, step int) (resp *cmodel.GraphQueryResponse, err error) {
