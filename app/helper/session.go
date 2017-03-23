@@ -8,8 +8,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
-	"github.com/masato25/owl_backend/app/model/uic"
-	"github.com/masato25/owl_backend/config"
+	"github.com/open-falcon/falcon-plus/modules/api/app/model/uic"
+	"github.com/open-falcon/falcon-plus/modules/api/config"
 )
 
 type WebSession struct {
@@ -80,7 +80,7 @@ func GetUser(c *gin.Context) (user uic.User, err error) {
 	user = uic.User{
 		Name: websession.Name,
 	}
-	dt := db.Where(&user).Find(&user)
+	dt := db.Table("user").Where(&user).Find(&user)
 	err = dt.Error
 	return
 }

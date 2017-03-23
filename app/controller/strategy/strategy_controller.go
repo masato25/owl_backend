@@ -10,8 +10,9 @@ import (
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
-	h "github.com/masato25/owl_backend/app/helper"
-	f "github.com/masato25/owl_backend/app/model/falcon_portal"
+	h "github.com/open-falcon/falcon-plus/modules/api/app/helper"
+	f "github.com/open-falcon/falcon-plus/modules/api/app/model/falcon_portal"
+	"github.com/spf13/viper"
 )
 
 func GetStrategys(c *gin.Context) {
@@ -206,7 +207,11 @@ func DeleteStrategy(c *gin.Context) {
 }
 
 func MetricQuery(c *gin.Context) {
-	data, err := ioutil.ReadFile("data/metric")
+	filePath := viper.GetString("metric_list_file")
+	if filePath == "" {
+		filePath = "./data/metric"
+	}
+	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		h.JSONR(c, badstatus, err)
 		return

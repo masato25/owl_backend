@@ -7,13 +7,13 @@ import (
 
 	"net/http"
 
-	cmodel "github.com/Cepave/open-falcon-backend/common/model"
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
-	h "github.com/masato25/owl_backend/app/helper"
-	m "github.com/masato25/owl_backend/app/model/graph"
-	"github.com/masato25/owl_backend/app/utils"
-	g "github.com/masato25/owl_backend/graph"
+	cmodel "github.com/open-falcon/falcon-plus/common/model"
+	h "github.com/open-falcon/falcon-plus/modules/api/app/helper"
+	m "github.com/open-falcon/falcon-plus/modules/api/app/model/graph"
+	"github.com/open-falcon/falcon-plus/modules/api/app/utils"
+	g "github.com/open-falcon/falcon-plus/modules/api/graph"
 )
 
 func EndpointRegexpQuery(c *gin.Context) {
@@ -26,16 +26,27 @@ func EndpointRegexpQuery(c *gin.Context) {
 	}
 	if q == "" {
 		h.JSONR(c, http.StatusBadRequest, "q is missing")
-	} else {
-		var endpoint []m.Endpoint
-		db.Graph.Table("endpoint").Select("endpoint, id").Where("endpoint regexp ?", q).Limit(limit).Scan(&endpoint)
-		endpoints := []map[string]interface{}{}
-		for _, e := range endpoint {
-			endpoints = append(endpoints, map[string]interface{}{"id": e.ID, "endpoint": e.Endpoint})
-		}
-		h.JSONR(c, endpoints)
+		return
 	}
-	return
+
+	var endpoint []m.Endpoint
+	qs := strings.Split(q, " ")
+	dt := db.Graph.Table("endpoint").Select("endpoint, id").Where("endpoint regexp ?", strings.TrimSpace(qs[0]))
+	for _, term := range qs[1:] {
+		dt = dt.Where("endpoint regexp ?", strings.TrimSpace(term))
+	}
+	dt = dt.Limit(limit).Scan(&endpoint)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusBadRequest, dt.Error)
+		return
+	}
+
+	endpoints := []map[string]interface{}{}
+	for _, e := range endpoint {
+		endpoints = append(endpoints, map[string]interface{}{"id": e.ID, "endpoint": e.Endpoint})
+	}
+
+	h.JSONR(c, endpoints)
 }
 
 func EndpointCounterRegexpQuery(c *gin.Context) {
@@ -57,57 +68,30 @@ func EndpointCounterRegexpQuery(c *gin.Context) {
 		} else {
 			eids = fmt.Sprintf("(%s)", eids)
 		}
-		var counters []m.EndpointCounter
-		db.Graph.Table("endpoint_counter").Select("counter").Where(fmt.Sprintf("endpoint_id IN %s AND counter regexp '%s' ", eids, metricQuery)).Scan(&counters)
-		countersResp := []interface{}{}
-		for _, c := range counters {
-			countersResp = append(countersResp, c.Counter)
-		}
-		result := utils.UniqSet(countersResp)
-		result = utils.MapTake(result, limit)
-		h.JSONR(c, result)
-	}
-	return
-}
 
-func EndpointStrCounterRegexpQuery(c *gin.Context) {
-	endpoints := c.DefaultQuery("endpoints", "")
-	metricQuery := c.DefaultQuery("metricQuery", ".+")
-	limitTmp := c.DefaultQuery("limit", "500")
-	limit, err := strconv.Atoi(limitTmp)
-	if err != nil {
-		h.JSONR(c, http.StatusBadRequest, err)
-		return
-	}
-	if endpoints == "" {
-		h.JSONR(c, http.StatusBadRequest, "endpoints is missing")
-	} else {
-		enps := strings.Split(endpoints, ",")
-		enpids := []int{}
-		rows, _ := db.Graph.Table("endpoint").Select("id").Where("endpoint IN (?)", enps).Rows()
-		for rows.Next() {
-			id := struct {
-				Id int
-			}{}
-			db.Falcon.ScanRows(rows, &id)
-			enpids = append(enpids, id.Id)
-		}
-		eids, _ := utils.ArrIntToString(enpids)
-		if eids == "" {
-			h.JSONR(c, http.StatusBadRequest, "input error, please check your input info.")
-			return
-		} else {
-			eids = fmt.Sprintf("(%s)", eids)
-		}
 		var counters []m.EndpointCounter
-		db.Graph.Table("endpoint_counter").Select("counter").Where(fmt.Sprintf("endpoint_id IN %s AND counter regexp '%s' ", eids, metricQuery)).Scan(&counters)
+		dt := db.Graph.Table("endpoint_counter").Select("counter, step, type").Where(fmt.Sprintf("endpoint_id IN %s", eids))
+		qs := strings.Split(metricQuery, " ")
+		if len(qs) > 0 {
+			for _, term := range qs {
+				dt = dt.Where("counter regexp ?", strings.TrimSpace(term))
+			}
+		}
+		dt = dt.Limit(limit).Scan(&counters)
+		if dt.Error != nil {
+			h.JSONR(c, http.StatusBadRequest, dt.Error)
+			return
+		}
+
 		countersResp := []interface{}{}
 		for _, c := range counters {
-			countersResp = append(countersResp, c.Counter)
+			countersResp = append(countersResp, map[string]interface{}{
+				"counter": c.Counter,
+				"step":    c.Step,
+				"type":    c.Type,
+			})
 		}
-		result := utils.UniqSet(countersResp)
-		result = utils.MapTake(result, limit)
-		h.JSONR(c, result)
+		h.JSONR(c, countersResp)
 	}
 	return
 }
@@ -118,7 +102,7 @@ type APIQueryGraphDrawData struct {
 	ConsolFun string   `json:"consol_fun" binding:"required"`
 	StartTime int64    `json:"start_time" binding:"required"`
 	EndTime   int64    `json:"end_time" binding:"required"`
-	Step      int      `json:"step" binding:"required"`
+	Step      int      `json:"step"`
 }
 
 func QueryGraphDrawData(c *gin.Context) {
@@ -130,7 +114,13 @@ func QueryGraphDrawData(c *gin.Context) {
 	respData := []*cmodel.GraphQueryResponse{}
 	for _, host := range inputs.HostNames {
 		for _, counter := range inputs.Counters {
-			data, _ := fetchData(host, counter, inputs.ConsolFun, inputs.StartTime, inputs.EndTime, inputs.Step)
+			// TODO:cache step
+			var step []int
+			dt := db.Graph.Raw("select a.step from endpoint_counter as a, endpoint as b where b.endpoint = ? and a.endpoint_id = b.id and a.counter = ? limit 1", host, counter).Scan(&step)
+			if dt.Error != nil || len(step) == 0 {
+				continue
+			}
+			data, _ := fetchData(host, counter, inputs.ConsolFun, inputs.StartTime, inputs.EndTime, step[0])
 			respData = append(respData, data)
 		}
 	}

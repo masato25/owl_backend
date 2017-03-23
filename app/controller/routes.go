@@ -4,20 +4,23 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/masato25/owl_backend/app/controller/expression"
-	"github.com/masato25/owl_backend/app/controller/graph"
-	"github.com/masato25/owl_backend/app/controller/host"
-	"github.com/masato25/owl_backend/app/controller/mockcfg"
-	"github.com/masato25/owl_backend/app/controller/strategy"
-	"github.com/masato25/owl_backend/app/controller/template"
-	"github.com/masato25/owl_backend/app/controller/uic"
-	"github.com/masato25/owl_backend/app/utils"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/alarm"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/dashboard_graph"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/dashboard_screen"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/expression"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/graph"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/host"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/mockcfg"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/strategy"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/template"
+	"github.com/open-falcon/falcon-plus/modules/api/app/controller/uic"
+	"github.com/open-falcon/falcon-plus/modules/api/app/utils"
 )
 
 func StartGin(port string, r *gin.Engine) {
 	r.Use(utils.CORS())
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Hello, I'm OWL (｡A｡)")
+		c.String(http.StatusOK, "Hello, I'm Falcon+ (｡A｡)")
 	})
 	graph.Routes(r)
 	uic.Routes(r)
@@ -26,5 +29,8 @@ func StartGin(port string, r *gin.Engine) {
 	host.Routes(r)
 	expression.Routes(r)
 	mockcfg.Routes(r)
-	r.Run()
+	dashboard_graph.Routes(r)
+	dashboard_screen.Routes(r)
+	alarm.Routes(r)
+	r.Run(port)
 }

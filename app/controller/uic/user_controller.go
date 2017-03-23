@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	h "github.com/masato25/owl_backend/app/helper"
-	"github.com/masato25/owl_backend/app/model/uic"
-	"github.com/masato25/owl_backend/app/utils"
+	h "github.com/open-falcon/falcon-plus/modules/api/app/helper"
+	"github.com/open-falcon/falcon-plus/modules/api/app/model/uic"
+	"github.com/open-falcon/falcon-plus/modules/api/app/utils"
 )
 
 type APIUserInput struct {
@@ -52,6 +53,11 @@ func CreateUser(c *gin.Context) {
 		QQ:     inputs.QQ,
 	}
 
+	//for create a root user during the first time
+	if inputs.Name == "root" {
+		user.Role = 2
+	}
+
 	dt := db.Uic.Table("user").Create(&user)
 	if dt.Error != nil {
 		h.JSONR(c, http.StatusBadRequest, dt.Error)
@@ -85,7 +91,8 @@ type APIUserUpdateInput struct {
 	QQ     string `json:"qq"`
 }
 
-func UpdateUser(c *gin.Context) {
+//update current user profile
+func UpdateCurrentUser(c *gin.Context) {
 	var inputs APIUserUpdateInput
 	err := c.BindJSON(&inputs)
 	switch {
@@ -142,9 +149,6 @@ func ChangePassword(c *gin.Context) {
 	case user.Passwd != utils.HashIt(inputs.OldPassword):
 		h.JSONR(c, http.StatusBadRequest, "oldPassword is not match current one")
 		return
-	case user.Passwd != "":
-		h.JSONR(c, http.StatusBadRequest, "Password can not be blank")
-		return
 	}
 
 	user.Passwd = utils.HashIt(inputs.NewPassword)
@@ -167,6 +171,7 @@ func UserInfo(c *gin.Context) {
 	return
 }
 
+// anyone should get the user infomation
 func GetUser(c *gin.Context) {
 	uidtmp := c.Params.ByName("uid")
 	if uidtmp == "" {
@@ -178,13 +183,8 @@ func GetUser(c *gin.Context) {
 		h.JSONR(c, badstatus, err)
 		return
 	}
-	user, err := h.GetUser(c)
-	if !user.IsAdmin() {
-		h.JSONR(c, badstatus, "only admin user can do this.")
-		return
-	}
 	fuser := uic.User{ID: int64(uid)}
-	if dt := db.Uic.Find(&fuser); dt.Error != nil {
+	if dt := db.Uic.Table("user").Find(&fuser); dt.Error != nil {
 		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
 	}
@@ -192,11 +192,120 @@ func GetUser(c *gin.Context) {
 	return
 }
 
+func GetUserByName(c *gin.Context) {
+	name := c.Params.ByName("user_name")
+	if name == "" {
+		h.JSONR(c, badstatus, "user name is missing")
+		return
+	}
+	fuser := uic.User{}
+	if dt := db.Uic.Table("user").Where("name = ?", name).First(&fuser); dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+	h.JSONR(c, fuser)
+	return
+}
+
+func IsUserInTeams(c *gin.Context) {
+	uidtmp := c.Params.ByName("uid")
+	if uidtmp == "" {
+		h.JSONR(c, badstatus, "user id is missing")
+		return
+	}
+	uid, err := strconv.Atoi(uidtmp)
+	if err != nil {
+		h.JSONR(c, badstatus, err)
+		return
+	}
+
+	teams_raw := c.DefaultQuery("team_names", "")
+	if teams_raw == "" {
+		h.JSONR(c, badstatus, err)
+		return
+	}
+	team_names := strings.Split(teams_raw, ",")
+
+	user := uic.User{}
+	dt := db.Uic.Table("user").Where("id = ?", uid).First(&user)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+
+	teams := []uic.Team{}
+	dt = db.Uic.Table("team").Where("name in (?)", team_names).Find(&teams)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+
+	tids := []int64{}
+	for _, t := range teams {
+		tids = append(tids, t.ID)
+	}
+
+	tus := []uic.RelTeamUser{}
+	dt = db.Uic.Table("rel_team_user").Where("uid = ? and tid in (?)", uid, tids).Find(&tus)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+
+	h.JSONR(c, "true")
+	return
+}
+
+//admin usage
+
+type APIAdminChangeUserProfileInput struct {
+	UserID int    `json:"user_id" binding:"required"`
+	Cnname string `json:"cnname" binding:"required"`
+	Email  string `json:"email" binding:"required"`
+	Phone  string `json:"phone"`
+	IM     string `json:"im"`
+	QQ     string `json:"qq"`
+}
+
+func AdminChangeUserProfile(c *gin.Context) {
+	var inputs APIAdminChangeUserProfileInput
+	err := c.BindJSON(&inputs)
+	if err != nil {
+		h.JSONR(c, http.StatusExpectationFailed, err)
+		return
+	}
+
+	cuser, err := h.GetUser(c)
+	if err != nil {
+		h.JSONR(c, http.StatusExpectationFailed, err)
+		return
+	} else if !cuser.IsAdmin() {
+		h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
+		return
+	}
+
+	user := uic.User{}
+	uid := inputs.UserID
+	uuser := map[string]interface{}{
+		"Cnname": inputs.Cnname,
+		"Email":  inputs.Email,
+		"Phone":  inputs.Phone,
+		"IM":     inputs.IM,
+		"QQ":     inputs.QQ,
+	}
+	dt := db.Uic.Model(&user).Where("id = ?", uid).Update(uuser)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+		return
+	}
+	h.JSONR(c, "user profile updated")
+	return
+}
+
 type APIAdminUserDeleteInput struct {
 	UserID int `json:"user_id" binding:"required"`
 }
 
-//admin usage
 func AdminUserDelete(c *gin.Context) {
 	var inputs APIAdminUserDeleteInput
 	err := c.Bind(&inputs)
@@ -226,7 +335,6 @@ type APIAdminChangePassword struct {
 	Passwd string `json:"password" binding:"required"`
 }
 
-//admin usage
 func AdminChangePassword(c *gin.Context) {
 	var inputs APIAdminChangePassword
 	err := c.Bind(&inputs)
@@ -234,15 +342,20 @@ func AdminChangePassword(c *gin.Context) {
 		h.JSONR(c, http.StatusBadRequest, err)
 		return
 	}
-	websession, _ := h.GetSession(c)
-	user := uic.User{Name: websession.Name}
-	dt := db.Uic.Where(&user).Find(&user)
-	switch {
-	case dt.Error != nil:
-		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
+
+	cuser, err := h.GetUser(c)
+	if err != nil {
+		h.JSONR(c, http.StatusExpectationFailed, err)
 		return
-	case !user.IsAdmin():
+	} else if !cuser.IsAdmin() {
 		h.JSONR(c, http.StatusBadRequest, "you don't have permission!")
+		return
+	}
+
+	user := uic.User{ID: int64(inputs.UserID)}
+	dt := db.Uic.Where(&user).Find(&user)
+	if dt.Error != nil {
+		h.JSONR(c, http.StatusExpectationFailed, dt.Error)
 		return
 	}
 
@@ -298,13 +411,12 @@ func UserList(c *gin.Context) {
 	return
 }
 
-//admin usage
 type APIRoleUpdate struct {
 	UserID int64  `json:"user_id" binding:"required"`
 	Admin  string `json:"admin" binding:"required"`
 }
 
-func ChangeRuleOfUser(c *gin.Context) {
+func ChangeRoleOfUser(c *gin.Context) {
 	var inputs APIRoleUpdate
 	err := c.Bind(&inputs)
 	if err != nil {

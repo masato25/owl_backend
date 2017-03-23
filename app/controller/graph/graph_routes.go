@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/masato25/owl_backend/app/utils"
-	"github.com/masato25/owl_backend/config"
+	"github.com/open-falcon/falcon-plus/modules/api/app/utils"
+	"github.com/open-falcon/falcon-plus/modules/api/config"
 )
 
 var db config.DBPool
@@ -19,6 +19,5 @@ func Routes(r *gin.Engine) {
 	authapi.Use(utils.AuthSessionMidd)
 	authapi.GET("/graph/endpoint", EndpointRegexpQuery)
 	authapi.GET("/graph/endpoint_counter", EndpointCounterRegexpQuery)
-	authapi.GET("/graph/endpointstr_counter", EndpointStrCounterRegexpQuery)
 	authapi.POST("/graph/history", QueryGraphDrawData)
 }
