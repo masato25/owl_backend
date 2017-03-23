@@ -7,6 +7,7 @@ import (
 	"strings"
 	"fmt"
 	"errors"
+	"time"
 )
 
 type APIGetNotesOfAlarmInputs struct {
@@ -51,6 +52,15 @@ func (s APIGetNotesOfAlarmInputs) collectFilters() string {
 	return filterStrTmp
 }
 
+type APIGetNotesOfAlarmOuput struct {
+	EventCaseId string     `json:"event_caseId"`
+	Note        string     `json:"note"`
+	CaseId      string     `json:"case_id"`
+	Status      string     `json:"status"`
+	Timestamp   *time.Time `json:"timestamp"`
+	UserName      string      `json:"user"`
+}
+
 func GetNotesOfAlarm(c *gin.Context) {
 	var inputs APIGetNotesOfAlarmInputs
 	if err := c.Bind(&inputs); err != nil {
@@ -77,13 +87,25 @@ func GetNotesOfAlarm(c *gin.Context) {
 		inputs.Limit,
 	)
 	db.Alarm.Raw(perparedSql).Scan(&notes)
-	h.JSONR(c, notes)
+	output := []APIGetNotesOfAlarmOuput{}
+	for _, n := range notes {
+		output = append(output, APIGetNotesOfAlarmOuput{
+			EventCaseId: n.EventCaseId,
+			Note: n.Note,
+			CaseId: n.CaseId,
+			Status: n.Status,
+			Timestamp: n.Timestamp,
+			UserName: n.GetUserName(),
+		})
+	}
+	h.JSONR(c, output)
 }
 
 type APIAddNotesToAlarmInputs struct {
 	EventId     string `json:"event_id" form:"event_id" binding:"required"`
 	Note string `json:"note" form:"note" binding:"required"`
 	Status string `json:"status" form:"status" binding:"required"`
+	CaseId string `json:"case_id" form:"case_id"`
 }
 
 func (s APIAddNotesToAlarmInputs) CheckingFormating() error {
@@ -119,6 +141,7 @@ func AddNotesToAlarm(c *gin.Context) {
 		Note: inputs.Note,
 		Status: inputs.Status,
 		EventCaseId: inputs.EventId,
+		CaseId: inputs.CaseId,
 		//time will update on database self
 	}
 	fmt.Printf("%v", user)

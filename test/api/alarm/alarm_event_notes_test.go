@@ -32,7 +32,7 @@ func TestAlarmEventNote(t *testing.T) {
 			}).
 			Get(fmt.Sprintf("%s/event_note", host))
 		parser, _ := jsonql.NewStringQuery(resp.String())
-		check, _ := parser.Query("id!=-1")
+		check, _ := parser.Query("event_caseId!='--'")
 		// log.Debugf("%v\n", resp.String())
 		So(len(check.([]interface{})), ShouldEqual, 2)
 	})
@@ -74,7 +74,8 @@ func TestAlarmEventNote(t *testing.T) {
 			{
 				"event_id": "%s",
 				"note": "test note",
-				"status": "ignored"
+				"status": "ignored",
+				"case_id": "a000001"
 			}`, eventId)).
 			Post(fmt.Sprintf("%s/event_note", host))
 		log.Debugf("%v", resp.String())
