@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<pre><code>/api/v1/dashboard/screen/1268
+</code></pre>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>
+{
+  "graphs": [
+    {
+      "counters": [
+        "c1",
+        "c2"
+      ],
+      "endpoints": [
+        "a",
+        "b"
+      ],
+      "falcon_tags": "",
+      "graph_id": 4917,
+      "graph_type": "h",
+      "method": "",
+      "position": 0,
+      "screen_id": 1274,
+      "timespan": 3600,
+      "title": "grep_demo"
+    }
+  ],
+  "scren": {
+    "id": 1274,
+    "pid": 0,
+    "name": "screen_test2"
+  }
+}
+</code></p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>

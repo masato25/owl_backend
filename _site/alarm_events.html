@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+  <li>支援GET &amp;&amp; POST</li>
+  <li>GET: “/api/v1/alarm/events?startTime=1466956800&amp;endTime=1480521600”</li>
+  <li>POST: <code>form post</code> &amp; <code>json body post</code> 皆可以使用</li>
+  <li>用于储存每一次的告警历史, 触发及恢复时机点</li>
+  <li>参数:</li>
+  <li>startTime: 开始区间</li>
+  <li>endTime: 结束区间</li>
+  <li>status: 系统判定告警状态 [0, 1] 0表触发, 1表恢复</li>
+  <li>event_id: 某一单向告警id [拿取单笔告告警状态]</li>
+  <li>limit: 设定笔数返回上线 [预设及最大上线值:50]</li>
+  <li>page: 后端分页页数</li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<p><code>{
+ 	startTime: 1466956800,
+ 	endTime: 1480521600,
+ 	status: 0,
+ 	event_id: "s_165_cef145900bf4e2a4a0db8b85762b9cdb",
+ 	limit: 50,
+ 	page: 1
+}</code></p>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>[
+  {
+    "id": 635166,
+    "event_caseId": "s_165_cef145900bf4e2a4a0db8b85762b9cdb",
+    "step": 0,
+    "cond": "10.649350649350648 != 66",
+    "status": 0,
+    "timestamp": "2016-06-23T04:55:00+08:00"
+  },
+  {
+    "id": 635149,
+    "event_caseId": "s_165_cef145900bf4e2a4a0db8b85762b9cdb",
+    "step": 0,
+    "cond": "13.486005089058525 != 66",
+    "status": 0,
+    "timestamp": "2016-06-23T04:50:00+08:00"
+  }
+]</code></p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>

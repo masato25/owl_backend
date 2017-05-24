@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+  <li>limit</li>
+  <li>page</li>
+  <li>desc
+    <ul>
+      <li>value: true or false</li>
+      <li>Order by desc on id</li>
+    </ul>
+  </li>
+  <li>key_word
+    <ul>
+      <li>search key words of screen name</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<pre><code>/api/v1/screens?limit=10&amp;page=1&amp;desc=true&amp;key_word=test
+</code></pre>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>
+{
+  "current_page": 1,
+  "data": [
+    {
+      "graph_names": [],
+      "id": 962,
+      "pid": 0,
+      "name": "FCM",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "net.if.total.bytes",
+        "net.if.total.bytes"
+      ],
+      "id": 965,
+      "pid": 962,
+      "name": "net.if.total.bytes",
+      "creator": "root"
+    },
+    {
+      "graph_names": [],
+      "id": 967,
+      "pid": 0,
+      "name": "c01.i36",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "cpu",
+        "mysql_test",
+        "cpu-1"
+      ],
+      "id": 968,
+      "pid": 967,
+      "name": "cpu",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "cpu"
+      ],
+      "id": 969,
+      "pid": 962,
+      "name": "cpu",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "net.if.total.bytes"
+      ],
+      "id": 970,
+      "pid": 967,
+      "name": "net.if.total.bytes",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "mem"
+      ],
+      "id": 971,
+      "pid": 967,
+      "name": "mem",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "mem"
+      ],
+      "id": 972,
+      "pid": 962,
+      "name": "mem",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "cpu.load"
+      ],
+      "id": 973,
+      "pid": 962,
+      "name": "cpu.load",
+      "creator": "root"
+    },
+    {
+      "graph_names": [
+        "cpu.load"
+      ],
+      "id": 975,
+      "pid": 967,
+      "name": "cpu.load",
+      "creator": "root"
+    }
+  ],
+  "desc_order": false,
+  "key_word": "",
+  "order_by": "id",
+  "totall_count": 123,
+  "totall_page": 13
+}
+</code></p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<p><code>{
+  "tags": "",
+  "step": 60,
+  "obj_type": "host",
+  "obj": "docker-agent",
+  "mock": -2,
+  "metric": "test.metric",
+  "id": 4,
+  "dstype": "GAUGE"
+}</code></p>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>{
+  "id": 0,
+  "name": "",
+  "obj": "docker-agent",
+  "obj_type": "host",
+  "metric": "test.metric",
+  "tags": "",
+  "dstype": "GAUGE",
+  "step": 60,
+  "mock": -2,
+  "creator": ""
+}</code></p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>

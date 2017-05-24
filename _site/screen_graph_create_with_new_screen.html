@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+  <li>screen_name
+    <ul>
+      <li>string [required]</li>
+    </ul>
+  </li>
+  <li>title
+    <ul>
+      <li>string [required]</li>
+      <li>name of graph</li>
+    </ul>
+  </li>
+  <li>endpoints
+    <ul>
+      <li>[]string [required]</li>
+    </ul>
+  </li>
+  <li>counters
+    <ul>
+      <li>[]string [required]</li>
+    </ul>
+  </li>
+  <li>timespan
+    <ul>
+      <li>int64</li>
+      <li>时间区段 (秒)
+        <ul>
+          <li>default 3600</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>graph_type
+    <ul>
+      <li>string [required]</li>
+      <li>视角: h (endpoint view), k (counter view), a (combo view)</li>
+      <li>accept values:
+        <ul>
+          <li>h</li>
+          <li>a</li>
+          <li>k</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>method
+    <ul>
+      <li>string</li>
+      <li>accept values:
+        <ul>
+          <li>SUM  </li>
+          <li>空值</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>position
+    <ul>
+      <li>int64</li>
+      <li>排序
+        <ul>
+          <li>预设值為0</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>falcon_tags
+    <ul>
+      <li>string</li>
+      <li>owl-light not this concept, keep empty. (open-falcon only)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<pre><code>{
+  "title": "graphtitle",
+  "screen_name": "newscreen",
+  "endpoints": ["a","b"],
+  "counters":["c1","c2"],
+  "graph_type": 'h'
+}
+</code></pre>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>
+{"id":4913, "screen_id": }
+</code>
+* return created graph id</p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+  <title>open-falcon</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href='assets.css' rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  <ul>
+  <li><a href="#/authentication">Session</a> Required</li>
+  <li>使用者可以对告警留言并人工切换状态</li>
+  <li>参数:</li>
+  <li>event_id: 某一单向告警id</li>
+  <li>status: 人工判定告警状态 [“in progress”, “unresolved”, “resolved”, “ignored”, “comment”], comment之外的留言会改变event_case的process_status状态</li>
+  <li>note: 对于告警留言</li>
+  <li>case_id: 填入外部对应的系统公单号</li>
+</ul>
+
+<h3 id="request">Request</h3>
+
+<p><code>{
+	"event_id": "s_165_cef145900bf4e2a4a0db8b85762b9cdb",
+	"note": "closed case",
+	"case_id": "k00001",
+	"status": "resolved"
+}</code></p>
+
+<h3 id="response">Response</h3>
+
+<p><code>Status: 200</code>
+<code>{
+  "id": "s_165_cef145900bf4e2a4a0db8b85762b9cdb",
+  "message": "add note to s_165_cef145900bf4e2a4a0db8b85762b9cdb successfuled"
+}</code></p>
+
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src='assets.js' type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>
